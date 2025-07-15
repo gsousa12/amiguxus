@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { PawPrint, Menu, X } from "lucide-react";
 import { useMobileDetect } from "@/common/hooks/use-mobile-detect";
+import { useNavigate } from "react-router-dom";
 
 /* ============================================================= *
  *  TopHeader – header fixo, responsivo
@@ -93,12 +94,22 @@ const DonateButton: React.FC<DonateButtonProps> = ({ onClick }) => {
 };
 
 /* --- Logo ---------------------------------------------------- */
-const Logo: React.FC = () => (
-  <div className="flex items-center gap-1 text-rose-500">
-    <PawPrint className="h-6 w-6" />
-    <span className="text-xl font-semibold">Amiguxus</span>
-  </div>
-);
+const Logo = () => {
+  const navigate = useNavigate();
+
+  const goToHomePage = () => {
+    navigate("/");
+  };
+  return (
+    <div
+      className="flex items-center gap-1 text-rose-500 hover:cursor-pointer"
+      onClick={goToHomePage}
+    >
+      <PawPrint className="h-6 w-6" />
+      <span className="text-xl font-semibold">Amiguxus</span>
+    </div>
+  );
+};
 
 /* --- Entrar -------------------------------------------------- */
 const LoginButton: React.FC = () => (
