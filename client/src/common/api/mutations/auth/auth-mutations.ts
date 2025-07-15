@@ -1,6 +1,9 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { LoginRequest } from "../../interfaces/auth-api-interfaces";
-import { loginDispatch } from "../../dispatch/auth-dispatchs";
+import {
+  LoginRequest,
+  RegisterRequest,
+} from "../../interfaces/auth-api-interfaces";
+import { loginDispatch, registerDispatch } from "../../dispatch/auth-dispatchs";
 
 export const loginMutation = (): UseMutationResult<
   null,
@@ -9,5 +12,15 @@ export const loginMutation = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: (request: LoginRequest) => loginDispatch(request),
+  });
+};
+
+export const registerUserMutation = (): UseMutationResult<
+  null,
+  unknown,
+  RegisterRequest
+> => {
+  return useMutation({
+    mutationFn: (request: RegisterRequest) => registerDispatch(request),
   });
 };

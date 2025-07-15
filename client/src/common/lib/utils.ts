@@ -22,3 +22,12 @@ export const getUserName = (): string | null => {
     return null;
   }
 };
+
+export const getOnlyFirstName = (name: string): string => {
+  const parts = name.split(" ");
+  if (parts.length > 1) {
+    return parts[0];
+  } else {
+    return name;
+  }
+};

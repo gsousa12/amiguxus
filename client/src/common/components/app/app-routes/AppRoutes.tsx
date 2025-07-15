@@ -5,6 +5,7 @@ import { HomePage } from "@/modules/home/pages/home-page/HomePage";
 import { SearchPage } from "@/modules/search/pages/search-page/SearchPage";
 import { PetDetailsPage } from "@/modules/pets/pages/pet-details/PetDetails";
 import { SignInPage } from "@/modules/users/pages/sign-in-page/SignIn";
+import { SignUpPage } from "@/modules/users/pages/sign-up-page/SignUpPage";
 
 export const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ export const AppRoutes = () => {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/details" element={<PetDetailsPage />} />
           <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
         </Route>
       </Routes>
     </main>

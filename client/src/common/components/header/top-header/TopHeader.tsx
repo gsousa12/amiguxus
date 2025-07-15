@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import { getUserName } from "@/common/lib/utils";
+import { getOnlyFirstName, getUserName } from "@/common/lib/utils";
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 
 /* ============================================================= */
@@ -89,7 +89,7 @@ const DesktopActions = ({
           <DogAvatar />
           {username && (
             <span className="text-sm font-medium text-gray-800">
-              Olá {username}
+              Olá, {getOnlyFirstName(username)}
             </span>
           )}
           <IconButton onClick={handleLogout} tooltip="Sair">
@@ -200,14 +200,18 @@ const LoginButton = () => {
     </button>
   );
 };
-const RegisterButton = () => (
-  <button
-    className="cursor-pointer rounded-md border border-rose-500 px-4 py-2
+const RegisterButton = () => {
+  const navigate = useNavigate();
+  return (
+    <button
+      onClick={() => navigate("/sign-up")}
+      className="cursor-pointer rounded-md border border-rose-500 px-4 py-2
       text-gray-800 transition hover:-translate-y-0.5 hover:shadow-md"
-  >
-    Cadastrar
-  </button>
-);
+    >
+      Cadastrar
+    </button>
+  );
+};
 
 /* Dog Avatar 32 px */
 const DogAvatar = () => (

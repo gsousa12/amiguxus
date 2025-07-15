@@ -3,11 +3,23 @@ import { ApiResponse } from "../get-api-response";
 import {
   getUserInformationResponse,
   LoginRequest,
+  RegisterRequest,
 } from "../interfaces/auth-api-interfaces";
 
 export const loginDispatch = async (request: LoginRequest): Promise<null> => {
   try {
     await api.post("/auth/login/", request);
+    return null;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerDispatch = async (
+  request: RegisterRequest
+): Promise<null> => {
+  try {
+    await api.post("/user/signup/", request);
     return null;
   } catch (error) {
     throw error;
