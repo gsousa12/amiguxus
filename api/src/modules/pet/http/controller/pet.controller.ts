@@ -32,7 +32,7 @@ export class PetController {
     @Query('city') city?: string,
     @Query('state') state?: string,
   ) {
-    const limit = 30;
+    const limit = 12;
     const parsedPage = page ? Number(page) : 1;
     const parsedVaccinated = vaccinated !== undefined ? vaccinated === 'true' : undefined;
     const parsedNeutered = neutered !== undefined ? neutered === 'true' : undefined;
