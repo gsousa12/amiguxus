@@ -17,7 +17,6 @@ export class PetController {
     return null;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/')
   @HttpCode(HttpStatus.OK)
   async getPetList(
@@ -64,7 +63,6 @@ export class PetController {
     return null;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   async getPetById(@Param('id') id: number) {
