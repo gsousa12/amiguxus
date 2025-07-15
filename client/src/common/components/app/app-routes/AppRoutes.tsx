@@ -11,6 +11,7 @@ export const AppRoutes = () => {
         <Route path="*" element={<NotFoundPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
         </Route>
       </Routes>
