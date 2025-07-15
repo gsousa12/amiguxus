@@ -10,14 +10,14 @@ export class AuthHelper {
     return this.bcryptAdapter.compare(password, userPassword);
   }
 
-  implementsCookies(access_token: string, res: Response) {
-    const isProductionEnvironment = process.env.NODE_ENV === 'production';
+  implementsCookies(access_token: string, res: Response, ttlSeconds = 3600) {
+    const isProd = process.env.NODE_ENV === 'production';
 
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      secure: isProductionEnvironment,
-      sameSite: isProductionEnvironment ? 'none' : 'lax',
-      maxAge: Number(3600000),
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
+      maxAge: ttlSeconds * 1000, // agora 8 h = 28 800 000 ms
     });
   }
 
