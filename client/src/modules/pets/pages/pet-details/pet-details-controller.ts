@@ -35,7 +35,7 @@ const sizeLabels: Record<EPetSize, string> = {
 /* ------------- controller ------------- */
 export const usePetDetailsPageController = () => {
   const { id } = useParams(); // /pets/:id
-  const [pet, setPet] = useState<Pet | null>(null);
+  const [pet, setPet] = useState<Pet>(MOCK_PET);
   const [isFavorite, setIsFavorite] = useState(false);
 
   /* mock fetch */

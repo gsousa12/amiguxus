@@ -26,6 +26,7 @@ import { Button } from "@/common/components/ui/button";
 import { Badge } from "@/common/components/ui/badge";
 import { useEffect, useState } from "react";
 import { usePetDetailsPageController } from "./pet-details-controller";
+import { AlertPopUp } from "@/common/components/popups/alert-popup/AlertPopup";
 
 /* util simples de classes */
 const cn = (...c: (string | false | undefined)[]) =>
@@ -59,8 +60,6 @@ export const PetDetailsPage = () => {
   }, [carouselApi]);
 
   const isMobile = useMobileDetect();
-
-  if (!pet) return null;
 
   /* =========================================================== */
   /*  JSX                                                        */
@@ -228,7 +227,7 @@ const AdoptionRequestCard = ({
     >
       <Heart
         className={cn(
-          "h-5 w-5 transition",
+          "h-5 w-5 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_0_0_rgba(0,0,0,0.1)] hover:cursor-pointer",
           isFavorite ? "fill-rose-500" : "fill-transparent"
         )}
       />
@@ -242,7 +241,9 @@ const AdoptionRequestCard = ({
 
     <CardContent className="space-y-4">
       <Button
-        className="w-full bg-yellow-400 text-gray-800 hover:bg-yellow-500"
+        className="w-full bg-amber-400 text-white hover:bg-amber-500 hover:cursor-pointer 
+        transition-all duration-150 hover:-translate-y-0.5 
+        hover:shadow-[0_4px_0_0_rgba(0,0,0,0.1)]"
         onClick={onRequest}
       >
         Enviar requisição de adoção
@@ -250,7 +251,9 @@ const AdoptionRequestCard = ({
 
       <Button
         variant="outline"
-        className="w-full hover:text-rose-500"
+        className="w-full hover:text-rose-500 hover:cursor-pointer
+        transition-all duration-150 hover:-translate-y-0.5 
+        hover:shadow-[0_4px_0_0_rgba(0,0,0,0.1)]"
         onClick={() => {}}
       >
         FAQs sobre requisição de adoção
