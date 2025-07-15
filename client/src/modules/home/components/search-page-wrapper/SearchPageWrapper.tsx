@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
-
-interface SearchPageWrapperProps {
-  children: ReactNode;
-}
-
-export const SearchPageWrapper = ({ children }: SearchPageWrapperProps) => {
-  return <div className="bg-gray-50 text-gray-900 p-8">{children}</div>;
-};
+export const SearchPageWrapper: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => (
+  <main
+    /* h-full garante que o flex-grow funcione; 
+       min-h calcula a área visível sem header */
+    className="flex min-h-[calc(100vh-4rem)] flex-col bg-white px-4 py-8 md:px-8"
+  >
+    {children}
+  </main>
+);

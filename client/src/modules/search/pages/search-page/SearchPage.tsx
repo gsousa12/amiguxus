@@ -13,33 +13,39 @@ export const SearchPage = () => {
 
   return (
     <SearchPageWrapper>
-      {/* -------- Layout -------- */}
       <div className="flex gap-8">
         {/* Sidebar (desktop) */}
         <FiltersPanel
-          className="hidden md:block w-1/4 max-w-xs"
+          className="hidden w-1/4 max-w-xs md:block"
           {...ctrl.filterProps}
         />
 
         {/* Conteúdo principal */}
         <div className="flex-1">
-          {/* Botão de filtros (mobile) */}
           <MobileFiltersButton {...ctrl.filterProps} />
 
-          {/* Badges */}
           <AppliedFiltersBar
             applied={ctrl.appliedFilters}
             onRemove={ctrl.onRemoveFilter}
           />
 
-          {/* Grid de cards */}
-          <PetsGrid pets={ctrl.pets} onCardClick={ctrl.onCardClick} />
+          {/* -------- LISTAGEM / EMPTY / LOADING -------- */}
+          {ctrl.isLoading ? (
+            <></>
+          ) : ctrl.pets.length === 0 ? (
+            <p className="py-10 text-center text-gray-500">
+              Nenhum pet encontrado.
+            </p>
+          ) : (
+            <PetsGrid pets={ctrl.pets} onCardClick={ctrl.onCardClick} />
+          )}
 
           {/* Paginação */}
+
           <Pagination
             currentPage={ctrl.page}
-            totalPages={ctrl.pagination?.totalPages ?? 1}
-            totalItems={ctrl.pagination?.totalItems ?? 0}
+            totalPages={ctrl.pagination ? ctrl.pagination.totalPages : 1}
+            totalItems={ctrl.pagination ? ctrl.pagination.totalPages : 0}
             onPageChange={ctrl.onPageChange}
           />
         </div>

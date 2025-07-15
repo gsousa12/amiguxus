@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   EPetAge,
   EPetGender,
@@ -7,21 +7,10 @@ import {
   EPetStatus,
 } from "@/common/types/pets.enums";
 import { Pet } from "@/common/types/pets.entity";
+import { getPetListQuery } from "@/common/api/queries/search/pets-queries";
 
-export interface FilterProps {
-  filters: FiltersState;
-  /** atualiza QUALQUER campo de filtro */
-  updateFilter: <K extends keyof FiltersState>(
-    key: K,
-    value: FiltersState[K]
-  ) => void;
-  className?: string;
-}
-
-/* --------------------------------------------------------------- *
- *  1.1  Tipos centrais
- * --------------------------------------------------------------- */
-export type FiltersState = {
+/* ---------------- tipos & labels (inalterados) ---------------- */
+export interface FiltersState {
   species?: EPetSpecies;
   breed: string;
   gender?: EPetGender;
@@ -29,8 +18,7 @@ export type FiltersState = {
   size?: EPetSize;
   vaccinated: boolean;
   neutered: boolean;
-};
-
+}
 interface PaginationInfo {
   totalPages: number;
   totalItems: number;
@@ -63,9 +51,6 @@ export const sizeLabels: Record<EPetSize, string> = {
   [EPetSize.LARGE]: "Grande",
 };
 
-/* --------------------------------------------------------------- *
- *  1.3  Defaults
- * --------------------------------------------------------------- */
 const INITIAL_FILTERS: FiltersState = {
   species: undefined,
   breed: "",
@@ -76,25 +61,37 @@ const INITIAL_FILTERS: FiltersState = {
   neutered: false,
 };
 
-/* --------------------------------------------------------------- *
- *  1.4  Controller
- * --------------------------------------------------------------- */
+/* ------------------- HELPERS ------------------- */
+const mapFiltersToQuery = (f: FiltersState) => ({
+  species: f.species,
+  breed: f.breed || undefined,
+  gender: f.gender,
+  age: f.age,
+  size: f.size,
+  vaccinated: f.vaccinated ? "true" : undefined,
+  neutered: f.neutered ? "true" : undefined,
+});
+
+/* ================= CONTROLLER ================== */
 export const useSearchPageController = () => {
   const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
   const [page, setPage] = useState(1);
-  const [pets, setPets] = useState<Pet[]>([]);
-  const [pagination, setPagination] = useState<PaginationInfo>();
 
-  /* -------- Mock fetch -------- */
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setPets(MOCK_PETS);
-      setPagination({ totalPages: 5, totalItems: 100 });
-    }, 400);
-    return () => clearTimeout(t);
-  }, [filters, page]);
+  /* ------------- chamada à API ------------- */
+  const {
+    data: petListData,
+    isPending,
+    isFetching,
+  } = getPetListQuery({
+    page,
+    ...mapFiltersToQuery(filters),
+  });
 
-  /* -------- Helpers -------- */
+  /* ------------- dados ---------------------- */
+  const pets: Pet[] = petListData?.data ?? [];
+  const pagination: PaginationInfo | undefined = petListData?.pagination;
+
+  /* ------------- filtros aplicados ---------- */
   const appliedFilters = useMemo(() => {
     const map: Record<string, string | undefined> = {
       species: filters.species && speciesLabels[filters.species],
@@ -111,6 +108,7 @@ export const useSearchPageController = () => {
       .map(([key, label]) => ({ key, label: label! }));
   }, [filters]);
 
+  /* ------------- helpers -------------------- */
   const updateFilter = <K extends keyof FiltersState>(
     key: K,
     value: FiltersState[K]
@@ -126,12 +124,12 @@ export const useSearchPageController = () => {
     }
   };
 
-  /* -------- Exposed -------- */
   return {
     /* data */
     pets,
     pagination,
     page,
+    isLoading: isPending || isFetching,
 
     /* filters */
     filterProps: { filters, updateFilter },
@@ -143,28 +141,3 @@ export const useSearchPageController = () => {
     onCardClick: (pet: Pet) => console.log("click card", pet.id),
   };
 };
-
-/* --------------------------------------------------------------- *
- *  1.5  Mock data
- * --------------------------------------------------------------- */
-const MOCK_PETS: Pet[] = Array.from({ length: 30 }).map((_, i) => ({
-  ownerId: 1,
-  id: `pet-${i + 1}`,
-  name: `Pet ${i + 1}`,
-  species: EPetSpecies.CAT,
-  breed: "SRD",
-  gender: EPetGender.UNKNOWN,
-  age: EPetAge.KITTEN,
-  size: EPetSize.MEDIUM,
-  vaccinated: true,
-  neutered: false,
-  status: EPetStatus.AVAILABLE,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  imagesUrls: [
-    "https://t3.ftcdn.net/jpg/01/04/40/06/360_F_104400672_zCaPIFbYT1dXdzN85jso7NV8M6uwpKtf.jpg",
-  ],
-  city: "Quixadá",
-  state: "CE",
-  description: "Descrição fofinha do pet.",
-}));

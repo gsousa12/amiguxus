@@ -23,7 +23,6 @@ export function getApiResponse<T>(
 }
 
 export interface ApiResponse<T> {
-  message: string;
   data: T;
   pagination?: PaginationMeta;
 }
