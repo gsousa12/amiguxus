@@ -11,23 +11,21 @@ export const useSignInPageController = () => {
 
   const { mutateAsync: signIn, error } = loginMutation();
   const onSignIn = async (data: SignInFormValues) => {
-    console.log(data);
-
     await signIn(
-      {
-        email: data.email,
-        password: data.password,
-      },
+      { email: data.email, password: data.password },
       {
         onSuccess: async () => {
-          const user = await getUserInformationDispatch();
-          setUser(user.data);
+          const { data: user } = await getUserInformationDispatch();
+
+          /* ---- persistência ---- */
+          sessionStorage.setItem("user", JSON.stringify(user));
+
+          /* ---- estados locais ---- */
+          setUser(user);
           setAuthenticated(true);
           navigate("/home", { replace: true });
         },
-        onError: () => {
-          setAuthenticated(false);
-        },
+        onError: () => setAuthenticated(false),
       }
     );
   };

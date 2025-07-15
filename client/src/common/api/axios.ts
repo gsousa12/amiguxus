@@ -1,8 +1,20 @@
-import axios from "axios";
-import { env } from "../configuration/configuration";
+import axios, { AxiosError } from "axios";
 
 export const api = axios.create({
-  // baseURL: env.API_BASE_URL,
-  baseURL: "http://localhost:3000/api", // Temporarily hardcoded for local development
+  baseURL: "http://localhost:3000/api",
   withCredentials: true,
 });
+
+// api.interceptors.response.use(
+//   (res) => res,
+//   (error: AxiosError) => {
+//     const status = error.response?.status ?? 0;
+//     const isAuthError = status === 401 || status === 403;
+
+//     if (isAuthError && window.location.pathname !== "/sign-in") {
+//       sessionStorage.removeItem("user");
+//       window.location.href = "/sign-in";
+//     }
+//     return Promise.reject(error);
+//   }
+// );

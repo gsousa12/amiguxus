@@ -20,3 +20,14 @@ export const getUserInformationDispatch = async (): Promise<
   const response = await api.get("/user/information");
   return response.data;
 };
+
+export const validateUserDispatch = async (
+  userId: number | null
+): Promise<boolean> => {
+  try {
+    await api.post("/auth/validate", { userId }); // <- shape correto
+    return true;
+  } catch {
+    return false; // apenas false, sem throw
+  }
+};
