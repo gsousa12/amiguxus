@@ -31,3 +31,12 @@ export const validateUserDispatch = async (
     return false; // apenas false, sem throw
   }
 };
+
+export const logoutDispatch = async (): Promise<null> => {
+  try {
+    await api.post("/auth/logout");
+    return null;
+  } catch (error) {
+    throw error;
+  }
+};

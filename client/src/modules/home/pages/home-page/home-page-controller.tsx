@@ -1,1 +1,3 @@
-export const homePageController = () => {};
+export const useHomePageController = () => {
+  return {};
+};

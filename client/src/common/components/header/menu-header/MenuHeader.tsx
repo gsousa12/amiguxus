@@ -24,18 +24,24 @@ export const MenuHeader: React.FC = () => (
               icon={Cat}
               label="Gatos"
               links={[
-                { to: "#", label: "Encontrar todos os gatos disponíveis" },
-                { to: "#", label: "Encontrar gatinhos filhotes" },
-                { to: "#", label: "Encontrar gatinhos idosos" },
+                {
+                  to: "/search",
+                  label: "Encontrar todos os gatos disponíveis",
+                },
+                { to: "/search", label: "Encontrar gatinhos filhotes" },
+                { to: "/search", label: "Encontrar gatinhos idosos" },
               ]}
             />
             <CategoryNavMenu
               icon={Dog}
               label="Cachorros"
               links={[
-                { to: "#", label: "Encontrar todos os cachorros disponíveis" },
-                { to: "#", label: "Encontrar cachorrinhos filhotes" },
-                { to: "#", label: "Encontrar cachorrinhos idosos" },
+                {
+                  to: "/search",
+                  label: "Encontrar todos os cachorros disponíveis",
+                },
+                { to: "/search", label: "Encontrar cachorrinhos filhotes" },
+                { to: "/search", label: "Encontrar cachorrinhos idosos" },
               ]}
             />
           </NavigationMenuList>

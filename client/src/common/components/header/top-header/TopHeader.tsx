@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import { getUserName } from "@/common/lib/utils";
+import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 
 /* ============================================================= */
 export const TopHeader: React.FC = () => {
@@ -65,29 +66,40 @@ const DesktopActions = ({
 }: {
   isAuth: boolean;
   username: string | null;
-}) => (
-  <div className="ml-auto flex items-center gap-4">
-    {!isAuth ? (
-      <>
-        <LoginButton />
-        <RegisterButton />
-      </>
-    ) : (
-      <>
-        <NotificationBell />
-        <DogAvatar />
-        {username && (
-          <span className="text-sm font-medium text-gray-800">
-            Olá {username}
-          </span>
-        )}
-        <IconButton onClick={() => {}} tooltip="Sair">
-          <LogOut className="h-5 w-5" />
-        </IconButton>
-      </>
-    )}
-  </div>
-);
+}) => {
+  const handleLogout = () => {
+    try {
+      logoutDispatch();
+      sessionStorage.removeItem("user");
+      window.location.href = "/";
+    } catch (error) {
+      // fixme - tratar erro de logout
+    }
+  };
+  return (
+    <div className="ml-auto flex items-center gap-4">
+      {!isAuth ? (
+        <>
+          <LoginButton />
+          <RegisterButton />
+        </>
+      ) : (
+        <>
+          <NotificationBell />
+          <DogAvatar />
+          {username && (
+            <span className="text-sm font-medium text-gray-800">
+              Olá {username}
+            </span>
+          )}
+          <IconButton onClick={handleLogout} tooltip="Sair">
+            <LogOut className="h-5 w-5" />
+          </IconButton>
+        </>
+      )}
+    </div>
+  );
+};
 
 /* ============================================================= */
 /*  Ações Mobile (header)                                         */
@@ -199,8 +211,8 @@ const RegisterButton = () => (
 
 /* Dog Avatar 32 px */
 const DogAvatar = () => (
-  <div className="h-8 w-8 cursor-pointer overflow-hidden rounded-full">
-    <DogSVG />
+  <div className="h-8 w-15 cursor-pointer overflow-hidden rounded-full">
+    <span className="text-sm">teste</span>
   </div>
 );
 
