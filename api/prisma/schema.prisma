@@ -32,7 +32,7 @@ model Pet {
   species              String
   breed                String?
   gender               String
-  age                  Int
+  age                  String
   size                 String
   description          String?
   vaccinated           Boolean

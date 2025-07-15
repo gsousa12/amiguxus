@@ -1,4 +1,4 @@
-import { EPetGender, EPetSize, EPetSpecies } from '../../../domain/enums/pet.enums';
+import { EPetAge, EPetGender, EPetSize, EPetSpecies } from '../../../domain/enums/pet.enums';
 
 export class CreatePetRequestDto {
   userId: number;
@@ -6,7 +6,7 @@ export class CreatePetRequestDto {
   species: EPetSpecies;
   breed: string | null;
   gender: EPetGender;
-  age: number;
+  age: EPetAge;
   size: EPetSize;
   description: string | null;
   vaccinated: boolean;

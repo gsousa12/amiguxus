@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreatePetRequestDto } from '../../core/application/dtos/request/create-pet.request.dto';
 import { createApiResponse } from 'src/common/utils/api-response';
 import { FavoritePetRequestDto } from '../../core/application/dtos/request/favorite-pet.request.dto';
+import { EPetAge } from '../../core/domain/enums/pet.enums';
 
 @Controller('pet')
 export class PetController {
@@ -26,7 +27,7 @@ export class PetController {
     @Query('species') species?: string,
     @Query('breed') breed?: string,
     @Query('gender') gender?: string,
-    @Query('age') age?: number,
+    @Query('age') age?: string,
     @Query('size') size?: string,
     @Query('vaccinated') vaccinated?: string,
     @Query('neutered') neutered?: string,
@@ -37,7 +38,7 @@ export class PetController {
     const parsedPage = page ? Number(page) : 1;
     const parsedVaccinated = vaccinated !== undefined ? vaccinated === 'true' : undefined;
     const parsedNeutered = neutered !== undefined ? neutered === 'true' : undefined;
-    const parsedAge = age !== undefined ? Number(age) : undefined;
+    const parsedAge = age !== undefined ? age : EPetAge.ADULT;
 
     const filters = {
       name,

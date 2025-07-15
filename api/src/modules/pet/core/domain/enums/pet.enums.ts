@@ -3,6 +3,13 @@ export enum EPetSpecies {
   CAT = 'cat',
 }
 
+export enum EPetAge {
+  PUPPY = 'puppy',
+  KITTEN = 'kitten',
+  ADULT = 'adult',
+  SENIOR = 'senior',
+}
+
 export enum EPetGender {
   MALE = 'male',
   FEMALE = 'female',

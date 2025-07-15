@@ -40,7 +40,7 @@ export class PetRepository implements IPetRepository {
       species?: string;
       breed?: string;
       gender?: string;
-      age?: number;
+      age?: string;
       size?: string;
       vaccinated?: boolean;
       neutered?: boolean;
@@ -69,7 +69,7 @@ export class PetRepository implements IPetRepository {
     if (filters.gender) {
       whereClause.gender = filters.gender;
     }
-    if (typeof filters.age === 'number') {
+    if (typeof filters.age === 'string') {
       whereClause.age = filters.age;
     }
     if (filters.size) {

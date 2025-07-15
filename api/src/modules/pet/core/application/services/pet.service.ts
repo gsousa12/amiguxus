@@ -27,7 +27,7 @@ export class PetService implements IPetService {
       species?: string;
       breed?: string;
       gender?: string;
-      age?: number;
+      age?: string;
       size?: string;
       vaccinated?: boolean;
       neutered?: boolean;
