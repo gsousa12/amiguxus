@@ -146,4 +146,10 @@ export class PetRepository implements IPetRepository {
       },
     });
   }
+
+  async getPetById(petId: string): Promise<Pet | null> {
+    return await this.prisma.pet.findUnique({
+      where: { id: petId },
+    });
+  }
 }

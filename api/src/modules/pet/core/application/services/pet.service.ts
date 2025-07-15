@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PetHelper } from '../helpers/pet.helper';
 import { PET_REPOSITORY } from 'src/common/tokens/repositories.tokens';
 import { IPetService } from './interfaces/pet-service.interface';
@@ -52,5 +52,15 @@ export class PetService implements IPetService {
     }
 
     await this.petRepository.addPetToFavorites(petId, userId);
+  }
+
+  async getPetById(petId: string): Promise<Pet> {
+    const pet = await this.petRepository.getPetById(petId);
+
+    if (!pet) {
+      throw new NotFoundException('Pet not found.');
+    }
+
+    return pet;
   }
 }

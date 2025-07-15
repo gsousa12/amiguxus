@@ -1,10 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { PetService } from '../../core/application/services/pet.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreatePetRequestDto } from '../../core/application/dtos/request/create-pet.request.dto';
 import { createApiResponse } from 'src/common/utils/api-response';
 import { FavoritePetRequestDto } from '../../core/application/dtos/request/favorite-pet.request.dto';
-import { EPetAge } from '../../core/domain/enums/pet.enums';
 
 @Controller('pet')
 export class PetController {
@@ -38,7 +37,7 @@ export class PetController {
     const parsedPage = page ? Number(page) : 1;
     const parsedVaccinated = vaccinated !== undefined ? vaccinated === 'true' : undefined;
     const parsedNeutered = neutered !== undefined ? neutered === 'true' : undefined;
-    const parsedAge = age !== undefined ? age : EPetAge.ADULT;
+    const parsedAge = age !== undefined ? age : undefined;
 
     const filters = {
       name,
@@ -63,5 +62,15 @@ export class PetController {
   async favoritePet(@Body() request: FavoritePetRequestDto) {
     await this.petService.favoritePet(request);
     return null;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  async getPetById(@Param('id') id: number) {
+    const petId = String(id);
+
+    const pet = await this.petService.getPetById(petId);
+    return createApiResponse(pet);
   }
 }
