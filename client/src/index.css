@@ -150,6 +150,7 @@ input:-webkit-autofill:active {
     @apply border-border outline-ring/50;
   }
   body {
+    font-family: "Comfortaa", sans-serif;
     @apply bg-background text-foreground;
   }
 }
