@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useSignInPageController } from "./sign-in-controller";
 import {
@@ -18,12 +17,14 @@ import {
   SignInFormValues,
   signInSchema,
 } from "../../zod-schemas/sign-in-schema";
+import { AlertPopUp } from "@/common/components/popups/alert-popup/AlertPopup";
+import { getErrorMessage } from "@/common/api/get-api-error-message";
 
 /* ------------------------------------------------------------------ */
 /* 2. Página                                                          */
 /* ------------------------------------------------------------------ */
 export const SignInPage = () => {
-  const { onSignIn, onCreateAccountDesire, onForgotPassword } =
+  const { onSignIn, onCreateAccountDesire, onForgotPassword, error } =
     useSignInPageController();
 
   const {
@@ -37,6 +38,13 @@ export const SignInPage = () => {
 
   /* controla exibição de senha */
   const [showPwd, setShowPwd] = useState(false);
+  const [openAlertPopup, setOpenAlertPopup] = useState<boolean>(false);
+  const requestError = !!error;
+  const errorMessage = getErrorMessage(error);
+
+  useEffect(() => {
+    requestError ? setOpenAlertPopup(true) : setOpenAlertPopup(false);
+  }, [requestError]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
@@ -152,6 +160,15 @@ export const SignInPage = () => {
 
         <CardFooter />
       </Card>
+
+      {requestError && (
+        <AlertPopUp
+          description={errorMessage}
+          open={openAlertPopup}
+          onClose={() => setOpenAlertPopup(!openAlertPopup)}
+          title="Oops!"
+        />
+      )}
     </main>
   );
 };

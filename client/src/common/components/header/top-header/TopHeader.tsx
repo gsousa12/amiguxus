@@ -112,15 +112,19 @@ const Logo = () => {
 };
 
 /* --- Entrar -------------------------------------------------- */
-const LoginButton: React.FC = () => (
-  <button
-    type="button"
-    className="cursor-pointer text-gray-800 transition-transform 
+const LoginButton = () => {
+  const navigate = useNavigate();
+  return (
+    <button
+      type="button"
+      className="cursor-pointer text-gray-800 transition-transform 
     duration-150 hover:-translate-y-0.5"
-  >
-    Entrar
-  </button>
-);
+      onClick={() => navigate("/sign-in")}
+    >
+      Entrar
+    </button>
+  );
+};
 
 /* --- Cadastrar ---------------------------------------------- */
 const RegisterButton: React.FC = () => (

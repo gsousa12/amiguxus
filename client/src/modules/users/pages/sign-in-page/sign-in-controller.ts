@@ -1,9 +1,35 @@
+import { loginMutation } from "@/common/api/mutations/auth/auth-mutations";
 import { SignInFormValues } from "../../zod-schemas/sign-in-schema";
+import { useNavigate } from "react-router-dom";
+import { getUserInformationDispatch } from "@/common/api/dispatch/auth-dispatchs";
+import { useAuthStore } from "@/common/stores/auth/auth-store";
 
 export const useSignInPageController = () => {
-  /* -------- chamadas vazias para implementar depois -------- */
+  const navigate = useNavigate();
+  const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
+  const setUser = useAuthStore((s) => s.setUser);
+
+  const { mutateAsync: signIn, error } = loginMutation();
   const onSignIn = async (data: SignInFormValues) => {
-    console.log("signin", data);
+    console.log(data);
+
+    await signIn(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: async () => {
+          const user = await getUserInformationDispatch();
+          setUser(user.data);
+          setAuthenticated(true);
+          navigate("/home", { replace: true });
+        },
+        onError: () => {
+          setAuthenticated(false);
+        },
+      }
+    );
   };
 
   const onCreateAccountDesire = () => {
@@ -18,5 +44,6 @@ export const useSignInPageController = () => {
     onSignIn,
     onCreateAccountDesire,
     onForgotPassword,
+    error,
   };
 };
