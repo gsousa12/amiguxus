@@ -34,7 +34,7 @@ const cn = (...c: (string | false | undefined)[]) =>
 
 export const PetDetailsPage = () => {
   /* -------- controller -------- */
-  const { pet, isFavorite, toggleFavorite, toLabel, onRequest } =
+  const { pet, isFavorite, toggleFavorite, toLabelPetInformations, onRequest } =
     usePetDetailsPageController();
 
   /* -------- carousel state -------- */
@@ -121,7 +121,10 @@ export const PetDetailsPage = () => {
         )}
       >
         {/* -------- Informações do Pet (70 %) -------- */}
-        <PetInfoSection pet={pet} toLabel={toLabel} />
+        <PetInfoSection
+          pet={pet}
+          toLabelPetInformations={toLabelPetInformations}
+        />
 
         {/* -------- Card de Requisição (30 %) -------- */}
         <AdoptionRequestCard
@@ -157,10 +160,10 @@ const InfoRow = ({
 
 const PetInfoSection = ({
   pet,
-  toLabel,
+  toLabelPetInformations,
 }: {
   pet: any;
-  toLabel: (k: string, v: any) => string;
+  toLabelPetInformations: (k: string, v: any) => string;
 }) => (
   <section className="space-y-4">
     <h2 className="flex items-center gap-2 text-2xl font-semibold text-rose-500">
@@ -176,16 +179,24 @@ const PetInfoSection = ({
       <InfoRow
         icon={Info}
         label="Espécie"
-        value={toLabel("species", pet.species)}
+        value={toLabelPetInformations("species", pet.species)}
       />
       <InfoRow icon={Info} label="Raça" value={pet.breed} />
       <InfoRow
         icon={Info}
         label="Gênero"
-        value={toLabel("gender", pet.gender)}
+        value={toLabelPetInformations("gender", pet.gender)}
       />
-      <InfoRow icon={Info} label="Idade" value={toLabel("age", pet.age)} />
-      <InfoRow icon={Info} label="Porte" value={toLabel("size", pet.size)} />
+      <InfoRow
+        icon={Info}
+        label="Idade"
+        value={toLabelPetInformations("age", pet.age)}
+      />
+      <InfoRow
+        icon={Info}
+        label="Porte"
+        value={toLabelPetInformations("size", pet.size)}
+      />
       <InfoRow
         icon={Syringe}
         label="Vacinado"

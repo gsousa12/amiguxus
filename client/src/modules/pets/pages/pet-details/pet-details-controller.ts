@@ -45,7 +45,7 @@ export const usePetDetailsPageController = () => {
   }, [id]);
 
   /* helpers */
-  const toLabel = (key: string, value: any) => {
+  const toLabelPetInformations = (key: string, value: any) => {
     switch (key) {
       case "species":
         return speciesLabels[value as EPetSpecies];
@@ -72,7 +72,7 @@ export const usePetDetailsPageController = () => {
     isFavorite,
     toggleFavorite,
     onRequest,
-    toLabel,
+    toLabelPetInformations,
     isMobile: useMobileDetect(),
   };
 };
