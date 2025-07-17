@@ -37,10 +37,10 @@ export const validateUserDispatch = async (
   userId: number | null
 ): Promise<boolean> => {
   try {
-    await api.post("/auth/validate", { userId }); // <- shape correto
+    await api.post("/auth/validate", { userId });
     return true;
   } catch {
-    return false; // apenas false, sem throw
+    return false;
   }
 };
 

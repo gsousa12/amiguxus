@@ -10,13 +10,9 @@ import {
 } from "../../ui/navigation-menu";
 import { Link } from "react-router-dom";
 
-/* =========================================================================
- *  MenuHeader – visível apenas ≥ md
- * ========================================================================= */
 export const MenuHeader: React.FC = () => (
   <header className="hidden md:block border-b bg-white">
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      {/* Wrapper com flex + justify-center para centralizar */}
       <div className="flex justify-center">
         <NavigationMenu className="mx-auto">
           <NavigationMenuList className="flex gap-8">
@@ -51,9 +47,6 @@ export const MenuHeader: React.FC = () => (
   </header>
 );
 
-/* =========================================================================
- *  CategoryNavMenu
- * ========================================================================= */
 interface CategoryNavMenuProps {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;

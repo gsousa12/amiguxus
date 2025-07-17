@@ -1,12 +1,10 @@
 import { SearchPageWrapper } from "@/modules/home/components/search-page-wrapper/SearchPageWrapper";
 import { useSearchPageController } from "./search-page-controller";
-import {
-  FiltersPanel,
-  MobileFiltersButton,
-} from "../../components/filters-panel/FiltersPanel";
 import { AppliedFiltersBar } from "../../components/applied-filters-bar/AppliedFiltersBar";
 import { PetsGrid } from "../../components/pets-grid/PetsGrid";
 import { Pagination } from "@/common/components/pagination/Pagination";
+import { FiltersPanel } from "../../components/filters-panel/FiltersPanel";
+import { MobileFiltersButton } from "../../components/mobile-filters-button/MobileFiltersButton";
 
 export const SearchPage = () => {
   const ctrl = useSearchPageController();
@@ -14,13 +12,11 @@ export const SearchPage = () => {
   return (
     <SearchPageWrapper>
       <div className="flex gap-8">
-        {/* Sidebar (desktop) */}
         <FiltersPanel
           className="hidden w-1/4 max-w-xs md:block"
           {...ctrl.filterProps}
         />
 
-        {/* Conteúdo principal */}
         <div className="flex-1">
           <MobileFiltersButton {...ctrl.filterProps} />
 
@@ -29,7 +25,6 @@ export const SearchPage = () => {
             onRemove={ctrl.onRemoveFilter}
           />
 
-          {/* -------- LISTAGEM / EMPTY / LOADING -------- */}
           {ctrl.isLoading ? (
             <></>
           ) : ctrl.pets.length === 0 ? (
@@ -39,8 +34,6 @@ export const SearchPage = () => {
           ) : (
             <PetsGrid pets={ctrl.pets} onCardClick={ctrl.onCardClick} />
           )}
-
-          {/* Paginação */}
 
           <Pagination
             currentPage={ctrl.page}

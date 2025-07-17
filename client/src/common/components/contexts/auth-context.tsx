@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 import { validateUserDispatch } from "@/common/api/dispatch/auth-dispatchs";
 import { getUserId } from "@/common/lib/utils";
 import React, {
@@ -11,8 +10,8 @@ import React, {
 import { useLocation } from "react-router-dom";
 
 interface AuthCtx {
-  isAuth: boolean | null; // null = carregando
-  refreshAuth: () => Promise<void>; // expõe se você quiser disparar manualmente
+  isAuth: boolean | null;
+  refreshAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthCtx>({
@@ -24,14 +23,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isAuth, setIsAuth] = useState<boolean | null>(null);
-  const location = useLocation(); // detecta mudança de rota
+  const location = useLocation();
 
   const checkAuth = useCallback(async () => {
     const ok = await validateUserDispatch(getUserId());
     setIsAuth(ok);
   }, []);
 
-  /* Valida 1) na montagem e 2) sempre que a rota mudar */
   useEffect(() => {
     checkAuth();
   }, [checkAuth, location.pathname]);
@@ -43,5 +41,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-/* Hook de conveniência */
 export const useAuth = () => useContext(AuthContext);
