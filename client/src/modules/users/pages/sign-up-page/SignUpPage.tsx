@@ -27,16 +27,8 @@ import { useSignUpController } from "./sign-up-controller";
 import {
   SignUpFormValues,
   signUpSchema,
-  STATE_SIGLAS,
 } from "../../zod-schemas/sign-up-schemas";
-
-/* mascara de telefone simples */
-const formatPhone = (v: string) =>
-  v
-    .replace(/\D/g, "")
-    .slice(0, 11)
-    .replace(/^(\d{2})(\d)/, "($1) $2")
-    .replace(/(\d{5})(\d)/, "$1-$2");
+import { formatPhone, STATE_SIGLAS } from "@/common/lib/utils";
 
 export const SignUpPage = () => {
   const { onSignUp, onGoToSignIn, error, successPopUp, setSuccessPopUp } =
@@ -60,11 +52,9 @@ export const SignUpPage = () => {
     },
   });
 
-  /* visibilidade das senhas */
   const [showPwd, setShowPwd] = useState(false);
   const [showPwdC, setShowPwdC] = useState(false);
 
-  /* popup de erro API */
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const requestError = !!error;
   const errorMessage = getErrorMessage(error);
@@ -94,25 +84,20 @@ export const SignUpPage = () => {
             </button>
           </p>
         </CardHeader>
-
         <Separator />
 
         <CardContent>
           <div className="flex flex-col items-center gap-8 md:flex-row">
-            {/* imagem desktop */}
             <img
               src="https://d339b5nop2tkmp.cloudfront.net/assets/signup/login-1-c3bff807287c3a781a9000d9cd77b8c60dd5bd4b7be86b8b524c637fbd48cee1.png"
               alt="Mascote Amiguxus"
               className="hidden w-1/2 max-w-xs md:block"
             />
-
-            {/* formulário */}
             <form
               onSubmit={handleSubmit(onSignUp)}
               className="flex w-full flex-col gap-6 md:w-1/2"
               noValidate
             >
-              {/* Nome */}
               <Field label="Nome" error={errors.name?.message}>
                 <Input
                   type="text"
@@ -121,8 +106,6 @@ export const SignUpPage = () => {
                   className={errors.name && "border-rose-500"}
                 />
               </Field>
-
-              {/* E-mail */}
               <Field label="E-mail" error={errors.email?.message}>
                 <Input
                   type="email"
@@ -131,8 +114,6 @@ export const SignUpPage = () => {
                   className={errors.email && "border-rose-500"}
                 />
               </Field>
-
-              {/* Telefone */}
               <Field label="Telefone" error={errors.phoneNumber?.message}>
                 <Input
                   type="text"
@@ -145,8 +126,6 @@ export const SignUpPage = () => {
                   className={errors.phoneNumber && "border-rose-500"}
                 />
               </Field>
-
-              {/* Cidade e Estado ------------------------------------------------ */}
               <div className="flex flex-col gap-6 sm:flex-row">
                 <Field
                   label="Cidade"
@@ -189,8 +168,6 @@ export const SignUpPage = () => {
                   </Select>
                 </Field>
               </div>
-
-              {/* Senha ---------------------------------------------------------- */}
               <Field label="Senha" error={errors.password?.message}>
                 <PasswordInput
                   show={showPwd}
@@ -199,8 +176,6 @@ export const SignUpPage = () => {
                   error={!!errors.password}
                 />
               </Field>
-
-              {/* Confirmar senha ------------------------------------------------ */}
               <Field
                 label="Confirmar senha"
                 error={errors.confirmPassword?.message}
@@ -212,8 +187,6 @@ export const SignUpPage = () => {
                   error={!!errors.confirmPassword}
                 />
               </Field>
-
-              {/* Botão ---------------------------------------------------------- */}
               <Button
                 type="submit"
                 disabled={isSubmitting}
@@ -227,7 +200,6 @@ export const SignUpPage = () => {
         <CardFooter />
       </Card>
 
-      {/* popups */}
       {requestError && (
         <AlertPopUp
           open={openAlertPopup}

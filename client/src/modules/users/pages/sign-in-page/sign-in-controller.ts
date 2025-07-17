@@ -16,11 +16,7 @@ export const useSignInPageController = () => {
       {
         onSuccess: async () => {
           const { data: user } = await getUserInformationDispatch();
-
-          /* ---- persistência ---- */
           sessionStorage.setItem("user", JSON.stringify(user));
-
-          /* ---- estados locais ---- */
           setUser(user);
           setAuthenticated(true);
           navigate("/home", { replace: true });
@@ -30,13 +26,9 @@ export const useSignInPageController = () => {
     );
   };
 
-  const onCreateAccountDesire = () => {
-    console.log("criar conta");
-  };
+  const onCreateAccountDesire = () => {};
 
-  const onForgotPassword = () => {
-    console.log("esqueci senha");
-  };
+  const onForgotPassword = () => {};
 
   return {
     onSignIn,

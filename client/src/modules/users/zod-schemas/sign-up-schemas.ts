@@ -1,35 +1,5 @@
+import { STATE_SIGLAS } from "@/common/lib/utils";
 import * as z from "zod";
-
-/* lista de siglas dos 27 estados */
-export const STATE_SIGLAS = [
-  "AC",
-  "AL",
-  "AP",
-  "AM",
-  "BA",
-  "CE",
-  "DF",
-  "ES",
-  "GO",
-  "MA",
-  "MT",
-  "MS",
-  "MG",
-  "PA",
-  "PB",
-  "PR",
-  "PE",
-  "PI",
-  "RJ",
-  "RN",
-  "RS",
-  "RO",
-  "RR",
-  "SC",
-  "SP",
-  "SE",
-  "TO",
-] as const;
 
 export const signUpSchema = z
   .object({

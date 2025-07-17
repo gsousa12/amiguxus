@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { registerUserMutation } from "@/common/api/mutations/auth/auth-mutations";
-
 import { useState } from "react";
 import { SignUpFormValues } from "../../zod-schemas/sign-up-schemas";
 
@@ -22,7 +21,7 @@ export const useSignUpController = () => {
       },
       {
         onSuccess: () => {
-          setSuccessPopUp(true); // exibe popup
+          setSuccessPopUp(true);
           setTimeout(() => navigate("/sign-in", { replace: true }), 1500);
         },
       }

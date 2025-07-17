@@ -20,9 +20,6 @@ import {
 import { AlertPopUp } from "@/common/components/popups/alert-popup/AlertPopup";
 import { getErrorMessage } from "@/common/api/get-api-error-message";
 
-/* ------------------------------------------------------------------ */
-/* 2. Página                                                          */
-/* ------------------------------------------------------------------ */
 export const SignInPage = () => {
   const { onSignIn, onCreateAccountDesire, onForgotPassword, error } =
     useSignInPageController();
@@ -36,7 +33,6 @@ export const SignInPage = () => {
     defaultValues: { email: "", password: "" },
   });
 
-  /* controla exibição de senha */
   const [showPwd, setShowPwd] = useState(false);
   const [openAlertPopup, setOpenAlertPopup] = useState<boolean>(false);
   const requestError = !!error;
@@ -71,23 +67,19 @@ export const SignInPage = () => {
 
         <Separator />
 
-        {/* ----------------- Conteúdo principal ----------------- */}
         <CardContent>
           <div className="flex flex-col items-center gap-8 md:flex-row">
-            {/* -------- Imagem (desktop) -------- */}
             <img
               src="https://d339b5nop2tkmp.cloudfront.net/assets/signup/login-1-c3bff807287c3a781a9000d9cd77b8c60dd5bd4b7be86b8b524c637fbd48cee1.png"
               alt="Mascote Amiguxus"
               className="hidden w-1/2 max-w-xs md:block"
             />
 
-            {/* -------- Formulário -------- */}
             <form
               onSubmit={handleSubmit(onSignIn)}
               className="flex w-full flex-col gap-6 md:w-1/2"
               noValidate
             >
-              {/* Email -------------------------------------------------- */}
               <div className="relative">
                 <Label htmlFor="email">E-mail</Label>
                 <Input
@@ -104,7 +96,6 @@ export const SignInPage = () => {
                 )}
               </div>
 
-              {/* Senha -------------------------------------------------- */}
               <div className="relative">
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative">
@@ -135,7 +126,6 @@ export const SignInPage = () => {
                 )}
               </div>
 
-              {/* Esqueci minha senha ----------------------------------- */}
               <button
                 type="button"
                 onClick={onForgotPassword}
@@ -145,7 +135,6 @@ export const SignInPage = () => {
                 Esqueci minha senha
               </button>
 
-              {/* Botão de login ---------------------------------------- */}
               <Button
                 type="submit"
                 className="bg-rose-500 text-white 

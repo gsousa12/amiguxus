@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { PawPrint, Menu, X, Bell, LogOut } from "lucide-react";
-import { DogSVG } from "@/common/assets/sgv/DogSgv";
 import { useAuth } from "../../contexts/auth-context";
 import { useMobileDetect } from "@/common/hooks/use-mobile-detect";
 import { useNavigate } from "react-router-dom";
@@ -12,33 +11,23 @@ import {
 import { getOnlyFirstName, getUserName } from "@/common/lib/utils";
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 
-/* ============================================================= */
 export const TopHeader: React.FC = () => {
-  const { isAuth } = useAuth(); // boolean | null
-  const authenticated = !!isAuth; // força para boolean (true / false)
+  const { isAuth } = useAuth();
+  const authenticated = !!isAuth;
 
   const username = getUserName();
   const isMobile = useMobileDetect();
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((p) => !p);
 
-  /* ----------------------------------------------------------- */
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="relative mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-          {/* ----------- ESQUERDA (Doar) ----------- */}
           <DonateButton onClick={() => {}} />
-
-          {/* ----------- LOGO (central) ------------ */}
           <Logo className="absolute left-1/2 -translate-x-1/2" />
-
-          {/* ----------- AÇÕES (direita) ----------- */}
           {!isMobile ? (
-            <DesktopActions
-              isAuth={authenticated} // <- aqui
-              username={username}
-            />
+            <DesktopActions isAuth={authenticated} username={username} />
           ) : (
             <MobileActions
               isAuth={authenticated}
@@ -49,7 +38,6 @@ export const TopHeader: React.FC = () => {
         </div>
       </header>
 
-      {/* ---------- Overlay (menu mobile) ---------- */}
       {isMobile && menuOpen && (
         <MobileOverlay isAuth={authenticated} toggleMenu={toggleMenu} />
       )}
@@ -57,9 +45,6 @@ export const TopHeader: React.FC = () => {
   );
 };
 
-/* ============================================================= */
-/*  Ações Desktop                                                 */
-/* ============================================================= */
 const DesktopActions = ({
   isAuth,
   username,
@@ -72,9 +57,7 @@ const DesktopActions = ({
       logoutDispatch();
       sessionStorage.removeItem("user");
       window.location.href = "/";
-    } catch (error) {
-      // fixme - tratar erro de logout
-    }
+    } catch (error) {}
   };
   return (
     <div className="ml-auto flex items-center gap-4">
@@ -101,11 +84,7 @@ const DesktopActions = ({
   );
 };
 
-/* ============================================================= */
-/*  Ações Mobile (header)                                         */
-/* ============================================================= */
 const MobileActions = ({
-  isAuth,
   menuOpen,
   toggleMenu,
 }: {
@@ -119,9 +98,6 @@ const MobileActions = ({
   </div>
 );
 
-/* ============================================================= */
-/*  Mobile Overlay                                                */
-/* ============================================================= */
 const MobileOverlay = ({
   isAuth,
   toggleMenu,
@@ -158,11 +134,6 @@ const MobileOverlay = ({
   </div>
 );
 
-/* ============================================================= */
-/*  Sub-componentes                                               */
-/* ============================================================= */
-
-/* Logo */
 const Logo = ({ className = "" }: { className?: string }) => {
   const navigate = useNavigate();
   return (
@@ -176,7 +147,6 @@ const Logo = ({ className = "" }: { className?: string }) => {
   );
 };
 
-/* Botão Doar */
 const DonateButton = ({ onClick }: { onClick: () => void }) => (
   <button
     onClick={onClick}
@@ -188,7 +158,6 @@ const DonateButton = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
-/* Login/Register */
 const LoginButton = () => {
   const navigate = useNavigate();
   return (
@@ -213,14 +182,12 @@ const RegisterButton = () => {
   );
 };
 
-/* Dog Avatar 32 px */
 const DogAvatar = () => (
   <div className="h-8 w-15 cursor-pointer overflow-hidden rounded-full">
     <span className="text-sm">teste</span>
   </div>
 );
 
-/* Notificações */
 const NotificationBell = () => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -237,7 +204,6 @@ const NotificationBell = () => (
   </DropdownMenu>
 );
 
-/* IconButton genérico */
 interface IconButtonProps {
   onClick?: () => void;
   tooltip?: string;
@@ -259,7 +225,6 @@ const IconButton: React.FC<React.PropsWithChildren<IconButtonProps>> = ({
   </button>
 );
 
-/* Hambúrguer */
 const HamburgerButton = ({
   open,
   onClick,
@@ -272,7 +237,6 @@ const HamburgerButton = ({
   </IconButton>
 );
 
-/* Itens do overlay */
 interface MenuItemProps {
   label: string;
   onClick: () => void;

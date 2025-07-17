@@ -24,16 +24,12 @@ export const Pagination = ({
   const pageSize = 10;
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
-      {/* Mostrando itens visíveis */}
       <div className="text-sm text-muted-foreground">
         Mostrando {(currentPage - 1) * pageSize + 1} -{" "}
         {totalPages !== 0 ? Math.min(currentPage * pageSize, totalItems) : 1} de{" "}
         {totalItems} itens
       </div>
-
-      {/* Controles de paginação */}
       <div className="flex items-center gap-2">
-        {/* Botão primeira página */}
         <Button
           variant="outline"
           size="sm"
@@ -44,7 +40,6 @@ export const Pagination = ({
           <ChevronsLeft className="h-4 w-4" />
         </Button>
 
-        {/* Botão página anterior */}
         <Button
           variant="outline"
           size="sm"
@@ -55,14 +50,12 @@ export const Pagination = ({
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        {/* Indicador de página */}
         <div className="flex items-center gap-1">
           <span className="text-sm font-medium">
             Página {currentPage} de {totalPages !== 0 ? totalPages : 1}
           </span>
         </div>
 
-        {/* Botão próxima página */}
         <Button
           variant="outline"
           size="sm"
@@ -73,7 +66,6 @@ export const Pagination = ({
           <ChevronRight className="h-4 w-4" />
         </Button>
 
-        {/* Botão última página */}
         <Button
           variant="outline"
           size="sm"
