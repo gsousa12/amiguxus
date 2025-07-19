@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
-import type { UseFormRegisterReturn } from "react-hook-form";
 import {
   Card,
   CardHeader,
@@ -10,7 +8,6 @@ import {
   CardFooter,
 } from "@/common/components/ui/card";
 import { Separator } from "@/common/components/ui/separator";
-import { Label } from "@/common/components/ui/label";
 import { Input } from "@/common/components/ui/input";
 import { Button } from "@/common/components/ui/button";
 import {
@@ -28,7 +25,9 @@ import {
   SignUpFormValues,
   signUpSchema,
 } from "../../zod-schemas/sign-up-schemas";
-import { formatPhone, STATE_SIGLAS } from "@/common/lib/utils";
+import { formatPhone, getStateName, STATE_SIGLAS } from "@/common/lib/utils";
+import { SignUpField } from "../../components/signup-field/SignUpField";
+import { PasswordInput } from "../../components/password-input/PasswordInput";
 
 export const SignUpPage = () => {
   const { onSignUp, onGoToSignIn, error, successPopUp, setSuccessPopUp } =
@@ -98,23 +97,23 @@ export const SignUpPage = () => {
               className="flex w-full flex-col gap-6 md:w-1/2"
               noValidate
             >
-              <Field label="Nome" error={errors.name?.message}>
+              <SignUpField label="Nome" error={errors.name?.message}>
                 <Input
                   type="text"
                   placeholder="Seu nome"
                   {...register("name")}
                   className={errors.name && "border-rose-500"}
                 />
-              </Field>
-              <Field label="E-mail" error={errors.email?.message}>
+              </SignUpField>
+              <SignUpField label="E-mail" error={errors.email?.message}>
                 <Input
                   type="email"
                   placeholder="exemplo@email.com"
                   {...register("email")}
                   className={errors.email && "border-rose-500"}
                 />
-              </Field>
-              <Field label="Telefone" error={errors.phoneNumber?.message}>
+              </SignUpField>
+              <SignUpField label="Telefone" error={errors.phoneNumber?.message}>
                 <Input
                   type="text"
                   placeholder="(99) 99999-9999"
@@ -125,9 +124,9 @@ export const SignUpPage = () => {
                   }}
                   className={errors.phoneNumber && "border-rose-500"}
                 />
-              </Field>
+              </SignUpField>
               <div className="flex flex-col gap-6 sm:flex-row">
-                <Field
+                <SignUpField
                   label="Cidade"
                   error={errors.city?.message}
                   className="w-full"
@@ -138,9 +137,9 @@ export const SignUpPage = () => {
                     {...register("city")}
                     className={errors.city && "border-rose-500"}
                   />
-                </Field>
+                </SignUpField>
 
-                <Field
+                <SignUpField
                   label="Estado"
                   error={errors.state?.message}
                   className="w-full"
@@ -161,22 +160,22 @@ export const SignUpPage = () => {
                     <SelectContent>
                       {STATE_SIGLAS.map((uf) => (
                         <SelectItem key={uf} value={uf}>
-                          {estadoNomeCompleto(uf)}
+                          {getStateName(uf)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </Field>
+                </SignUpField>
               </div>
-              <Field label="Senha" error={errors.password?.message}>
+              <SignUpField label="Senha" error={errors.password?.message}>
                 <PasswordInput
                   show={showPwd}
                   toggle={() => setShowPwd((v) => !v)}
                   register={register("password")}
                   error={!!errors.password}
                 />
-              </Field>
-              <Field
+              </SignUpField>
+              <SignUpField
                 label="Confirmar senha"
                 error={errors.confirmPassword?.message}
               >
@@ -186,7 +185,7 @@ export const SignUpPage = () => {
                   register={register("confirmPassword")}
                   error={!!errors.confirmPassword}
                 />
-              </Field>
+              </SignUpField>
               <Button
                 type="submit"
                 disabled={isSubmitting}
@@ -220,86 +219,3 @@ export const SignUpPage = () => {
     </main>
   );
 };
-
-/* ------------------------------------------------------------------ */
-/* helpers / sub-componentes                                          */
-/* ------------------------------------------------------------------ */
-const Field = ({
-  label,
-  error,
-  children,
-  className = "",
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <div className={`relative ${className}`}>
-    <Label>{label}</Label>
-    {children}
-    {error && (
-      <p className="absolute -bottom-5 text-xs text-rose-500">{error}</p>
-    )}
-  </div>
-);
-
-const PasswordInput = ({
-  show,
-  toggle,
-  register,
-  error,
-}: {
-  show: boolean;
-  toggle: () => void;
-  register: UseFormRegisterReturn; //  ←  tipo correto
-  error: boolean;
-}) => (
-  <div className="relative">
-    <Input
-      type={show ? "text" : "password"}
-      placeholder="●●●●●●"
-      {...register}
-      className={`${error && "border-rose-500 pr-10"}`}
-    />
-    <button
-      type="button"
-      onClick={toggle}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:cursor-pointer"
-    >
-      {show ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-    </button>
-  </div>
-);
-/* mapa UF → nome completo */
-const ESTADOS: Record<(typeof STATE_SIGLAS)[number], string> = {
-  AC: "Acre",
-  AL: "Alagoas",
-  AP: "Amapá",
-  AM: "Amazonas",
-  BA: "Bahia",
-  CE: "Ceará",
-  DF: "Distrito Federal",
-  ES: "Espírito Santo",
-  GO: "Goiás",
-  MA: "Maranhão",
-  MT: "Mato Grosso",
-  MS: "Mato Grosso do Sul",
-  MG: "Minas Gerais",
-  PA: "Pará",
-  PB: "Paraíba",
-  PR: "Paraná",
-  PE: "Pernambuco",
-  PI: "Piauí",
-  RJ: "Rio de Janeiro",
-  RN: "Rio Grande do Norte",
-  RS: "Rio Grande do Sul",
-  RO: "Rondônia",
-  RR: "Roraima",
-  SC: "Santa Catarina",
-  SP: "São Paulo",
-  SE: "Sergipe",
-  TO: "Tocantins",
-};
-
-const estadoNomeCompleto = (uf: (typeof STATE_SIGLAS)[number]) => ESTADOS[uf];
