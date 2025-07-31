@@ -1,4 +1,5 @@
-# Compose para ambiente de desenvolvimento #
+# docker-compose.yml - Versão Definitiva
+
 services:
   postgres:
     image: postgres:16-alpine

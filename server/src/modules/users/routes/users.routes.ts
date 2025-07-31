@@ -16,7 +16,6 @@ export const userRoutes = async (fastify: FastifyInstance) => {
         201: createResponseSchema(CreateUserResponseSchema),
       },
     },
-    // preHandler: [fastify.authenticate],
     handler: createUserHandler,
   });
 };

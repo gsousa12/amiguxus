@@ -8,6 +8,15 @@ export const CommonSchemas = Type.Object({
     },
   }),
 
+  password: Type.String({
+    minLength: 6,
+    maxLength: 100,
+    errorMessage: {
+      minLength: "A senha deve ter no mínimo 6 caracteres.",
+      maxLength: "A senha deve ter no máximo 100 caracteres.",
+    },
+  }),
+
   phone: Type.String({
     minLength: 11,
     maxLength: 15,

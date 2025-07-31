@@ -14,7 +14,8 @@ model User {
   email                String    @unique 
   hashed_password      String               
   city                 String           
-  state                String           
+  state                String          
+  is_active            Boolean   @default(true)
   created_at           DateTime  @default(now()) @db.Timestamptz 
   updated_at           DateTime? @updatedAt @db.Timestamptz 
 

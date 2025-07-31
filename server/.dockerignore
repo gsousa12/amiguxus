@@ -1,0 +1,19 @@
+# .dockerignore
+
+# Ignora as dependências locais, elas DEVEM ser instaladas dentro do container
+node_modules
+
+# Ignora a pasta de build local
+build
+dist
+
+# Ignora arquivos de ambiente e logs
+.env
+.env.*
+*.log
+
+# Ignora metadados do Git e do Docker
+.git
+.gitignore
+Dockerfile
+.dockerignore
