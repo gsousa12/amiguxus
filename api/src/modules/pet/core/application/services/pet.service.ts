@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Pet } from '@prisma/client';
 import { PetHelper } from '../helpers/pet.helper';
 import { PET_REPOSITORY } from 'src/common/tokens/repositories.tokens';
 import { IPetService } from './interfaces/pet-service.interface';
 import { PetRepository } from 'src/modules/pet/infrastructure/repository/pet.repository';
 import { CreatePetRequestDto } from '../dtos/request/create-pet.request.dto';
-import { Pet } from '@prisma/client';
 import { PaginationMeta } from 'src/common/utils/api-response';
 import { FavoritePetRequestDto } from '../dtos/request/favorite-pet.request.dto';
 
