@@ -1,19 +1,16 @@
-import { createNotificationWorker } from "background/workers/notifications.worker";
-import { applicationBuilder } from "./builder";
+import { applicationBuilder } from "./app.builder";
+import { workersBuilder } from "workers.builder";
 
 const build = async () => {
   try {
     console.log("Iniciando aplicação...");
     const application = applicationBuilder();
-
+    workersBuilder();
     const port = Number(process.env.PORT) || 3000;
 
     await application.listen({
       port: port,
     });
-
-    console.log("Inicializando worker de notificações...");
-    const notificationWorker = createNotificationWorker();
 
     console.log(`🌟 Aplicação iniciada no ambiente: ${process.env.NODE_ENV}`);
 
