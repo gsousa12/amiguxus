@@ -5,6 +5,12 @@ const errorHandlerPlugin = async (app: FastifyInstance) => {
   app.setErrorHandler((error, _, reply) => {
     app.log.error(error);
 
+    // if(error) {
+    //   return reply.status(400).send({
+    //     error
+    //   });
+    // }
+
     if (error.validation) {
       const validationError = error.validation[0];
 

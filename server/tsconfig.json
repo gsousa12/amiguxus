@@ -1,25 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
-    "rootDir": "./src",
+    // --- Configuração do Output ---
+    "outDir": "./build", // A pasta onde os arquivos .js serão criados.
+    "rootDir": "./src", // A pasta raiz que contém todo o seu código .ts.
+
+    // --- Configuração do Módulo e Target ---
     "target": "ES2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"],
-      "@common/*": ["common/*"],
-      "@database/*": ["database/*"],
-      "@jobs/*": ["jobs/*"],
-      "@messaging/*": ["messaging/*"],
-      "@modules/*": ["modules/*"],
-      "@users/*": ["modules/users/*"],
-      "@plugins/*": ["plugins/*"]
-    }
+    "baseUrl": "./src"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src", "src/database/prisma", "src/**/*.ts"],
   "exclude": ["node_modules"]
 }

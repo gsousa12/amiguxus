@@ -7,6 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PetSpecies {
+  dog
+  cat
+}
+
+enum PetAge {
+  puppy
+  adult
+  senior
+}
+
+enum PetSize {
+  small
+  medium
+  large
+}
+
+enum PetGender {
+  male
+  female
+  unknown
+}
+
+enum PetStatus {
+  available
+  adopted
+}
+
 model User {
   id                   String    @id @default(uuid())
   full_name            String
@@ -21,4 +49,29 @@ model User {
 
     // --- Mapeamento e Relations ---
   @@map("users")
+  pets                 Pet[] 
+}
+
+model Pet {
+  id                   String    @id @default(uuid())
+  ownerId              String    @default(uuid())
+  name                 String
+  species              PetSpecies
+  breed                String?
+  gender               PetGender
+  age                  PetAge
+  size                 PetSize
+  description          String?
+  vaccinated           Boolean
+  neutered             Boolean
+  status               PetStatus
+  imagesUrls           String[]
+  city                 String
+  state                String
+  created_at           DateTime  @default(now()) @db.Timestamptz 
+  updated_at           DateTime? @updatedAt @db.Timestamptz 
+
+    // --- Mapeamento e Relations ---
+  @@map("pets")
+  owner                User             @relation(fields: [ownerId], references: [id])
 }
