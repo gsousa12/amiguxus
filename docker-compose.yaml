@@ -1,4 +1,4 @@
-# docker-compose.yml - Versão Definitiva
+version: "3.8"
 
 services:
   postgres:
@@ -6,26 +6,57 @@ services:
     container_name: amiguxus-db
     restart: always
     environment:
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpassword
-      POSTGRES_DB: amiguxus_dev
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5433:5432"
     volumes:
       - amiguxus_postgres_data:/var/lib/postgresql/data
+    networks:
+      - amiguxus-net
 
   redis:
     image: redis:7-alpine
     container_name: amiguxus-redis
     restart: always
-    command: redis-server --requirepass devpassword
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
       - amiguxus_redis_data:/data
+    networks:
+      - amiguxus-net
+
+  minio:
+    image: minio/minio:latest
+    container_name: amiguxus-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - amiguxus_minio_data:/data
+    networks:
+      - amiguxus-net
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
 volumes:
   amiguxus_postgres_data:
     driver: local
   amiguxus_redis_data:
     driver: local
+  amiguxus_minio_data:
+    driver: local
+
+networks:
+  amiguxus-net:
+    driver: bridge
