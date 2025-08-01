@@ -75,3 +75,16 @@ model Pet {
   @@map("pets")
   owner                User             @relation(fields: [ownerId], references: [id])
 }
+
+model Notification {
+  id              String              @id @default(uuid())
+  title           String
+  message         String
+  is_read         Boolean             @default(false) 
+  related_user_id String              @db.Uuid
+  created_at      DateTime            @default(now()) @db.Timestamptz 
+  read_at         DateTime?           @db.Timestamptz 
+
+  // --- Mapeamento e Relations ---
+  @@map("notifications")
+}
