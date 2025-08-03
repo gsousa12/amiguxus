@@ -6,6 +6,7 @@ import { SearchPage } from "@/modules/search/pages/search-page/SearchPage";
 import { PetDetailsPage } from "@/modules/pets/pages/pet-details/PetDetails";
 import { SignInPage } from "@/modules/users/pages/sign-in-page/SignIn";
 import { SignUpPage } from "@/modules/users/pages/sign-up-page/SignUpPage";
+import { PetRegisterPage } from "@/modules/pets/pages/pet-register/PetRegister";
 
 export const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
           <Route path="/details" element={<PetDetailsPage />} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/register" element={<PetRegisterPage />} />
         </Route>
       </Routes>
     </main>
