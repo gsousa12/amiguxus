@@ -52,6 +52,14 @@ const DesktopActions = ({
   isAuth: boolean;
   username: string | null;
 }) => {
+  const navigate = useNavigate();
+  const navigateToRegisterPet = () => {
+    if (!isAuth) {
+      navigate("/home");
+      return;
+    }
+    navigate("/register");
+  };
   const handleLogout = () => {
     try {
       logoutDispatch();
@@ -68,6 +76,14 @@ const DesktopActions = ({
         </>
       ) : (
         <>
+          {isAuth && (
+            <button
+              className="hover:cursor-pointer"
+              onClick={navigateToRegisterPet}
+            >
+              Cadastrar Pet
+            </button>
+          )}
           <NotificationBell />
           <DogAvatar />
           {username && (

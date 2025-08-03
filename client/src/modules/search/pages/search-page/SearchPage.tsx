@@ -19,7 +19,6 @@ export const SearchPage = () => {
 
         <div className="flex-1">
           <MobileFiltersButton {...ctrl.filterProps} />
-          {/* <button>Cadastra Amiguxu</button> Botão deve ficar aqui só que a direita */}
           <AppliedFiltersBar
             applied={ctrl.appliedFilters}
             onRemove={ctrl.onRemoveFilter}
