@@ -1,7 +1,20 @@
+import { useEffect } from "react";
 import { PetRegisterForm } from "../../components/register-form/PetRegisterForm";
 import { usePetRegisterController } from "./pet-register-controller";
+import { useAuth } from "@/common/components/contexts/auth-context";
+import { useNavigate } from "react-router-dom";
 
 export const PetRegisterPage = () => {
+  const { isAuth } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuth) {
+      navigate("/home", { replace: true });
+
+      return;
+    }
+  }, []);
+
   const { form, onSubmit, isPending } = usePetRegisterController();
 
   return (

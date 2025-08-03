@@ -3,12 +3,14 @@ import { createResponseSchema } from "common/utils";
 import {
   CreatePetBodySchema,
   CreatePetResponseSchema,
+  GetMyPetsQuerySchema,
   GetPetsQuerySchema,
   PetEntitySchema,
   UploadPetImageResponseSchema,
 } from "../schemas";
 import {
   createPetHandler,
+  getMyPetsHanlder,
   getPetsHandler,
   uploadPetImageHandler,
 } from "../controller/pets.controller";
@@ -50,12 +52,27 @@ export const petRoutes = async (fastify: FastifyInstance) => {
     schema: {
       description: "Faz o upload de uma imagem de pet para o bucket.",
       tags: ["Pets"],
-      consumes: ["multipart/form-data"], // Informa que a rota espera um multipart
+      consumes: ["multipart/form-data"],
       response: {
         200: UploadPetImageResponseSchema,
       },
     },
-    preHandler: fastify.authenticate, // Mantém a rota protegida
-    handler: uploadPetImageHandler, // 3. Aponta para o handler correto
+    preHandler: fastify.authenticate,
+    handler: uploadPetImageHandler,
+  });
+
+  fastify.route({
+    method: "GET",
+    url: "/get-my-pets",
+    schema: {
+      description: "Retorna todos os pets cadastrado pelo usuário logado.",
+      tags: ["Pets"],
+      querystring: GetMyPetsQuerySchema,
+      response: {
+        200: createResponsePaginedSchema(PetEntitySchema),
+      },
+    },
+    preHandler: fastify.authenticate,
+    handler: getMyPetsHanlder,
   });
 };

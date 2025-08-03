@@ -1,5 +1,9 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { CreatePetBodySchemaType, GetPetsQuerySchemaType } from "../schemas";
+import {
+  CreatePetBodySchemaType,
+  GetMyPetsQuerySchemaType,
+  GetPetsQuerySchemaType,
+} from "../schemas";
 import { petsRepository } from "../repository/pets.repository";
 import { PetStatus } from "@prisma/client";
 import { createErrorResponse, createSuccessResponse } from "common/utils";
@@ -124,30 +128,21 @@ export const uploadPetImageHandler = async (
     return reply.status(400).send({ message: "Nenhum arquivo enviado." });
   }
 
-  // Gera um nome de arquivo único para evitar sobreposições
   const fileExtension = data.filename.substring(data.filename.lastIndexOf("."));
   const uniqueFileName = `${randomUUID()}${fileExtension}`;
 
   try {
-    // --- INÍCIO DA ALTERAÇÃO ---
-    // 1. Converte o stream do arquivo para um buffer em memória
     const buffer = await data.toBuffer();
-    // --- FIM DA ALTERAÇÃO ---
 
-    // Envia o comando de upload para o MinIO
     await request.server.minio.send(
       new PutObjectCommand({
         Bucket: environment.MINIO_BUCKET_NAME,
         Key: uniqueFileName,
-        // --- INÍCIO DA ALTERAÇÃO ---
-        // 2. Passa o buffer (com tamanho conhecido) em vez do stream
         Body: buffer,
-        // --- FIM DA ALTERAÇÃO ---
         ContentType: data.mimetype,
       })
     );
 
-    // Constrói a URL pública do arquivo
     const fileUrl = `${environment.MINIO_ENDPOINT}:${environment.MINIO_PORT}/${environment.MINIO_BUCKET_NAME}/${uniqueFileName}`;
 
     return reply.status(200).send({ url: fileUrl });
@@ -155,4 +150,36 @@ export const uploadPetImageHandler = async (
     request.log.error(error, "Falha ao fazer upload da imagem para o MinIO");
     return reply.status(500).send({ message: "Erro interno do servidor." });
   }
+};
+
+export const getMyPetsHanlder = async (
+  request: FastifyRequest<{ Querystring: GetMyPetsQuerySchemaType }>,
+  reply: FastifyReply
+) => {
+  const userId = request.user.id;
+  const { page } = request.query;
+  const pagination = {
+    page: page ? Number(page) : 1,
+    limit: 20,
+  };
+  const { data, total } = await petsRepository.findByOwnerId(
+    userId,
+    pagination
+  );
+
+  const lastPage = Math.ceil(total / 20);
+
+  const response = {
+    meta: {
+      total,
+      perPage: 20,
+      currentPage: page,
+      lastPage: lastPage > 0 ? lastPage : 1,
+      hasNextPage: (page ?? 20) < lastPage,
+      hasPreviousPage: (page ?? 20) > 1,
+    },
+    data,
+  };
+
+  return reply.status(200).send(response);
 };

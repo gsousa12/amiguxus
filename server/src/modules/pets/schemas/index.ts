@@ -14,4 +14,6 @@ export {
 export {
   GetPetsQuerySchema,
   GetPetsQuerySchemaType,
+  GetMyPetsQuerySchema,
+  GetMyPetsQuerySchemaType,
 } from "./pets.query.schemas";

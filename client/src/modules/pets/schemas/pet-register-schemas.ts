@@ -23,7 +23,7 @@ export const petRegisterFormSchema = z.object({
   description: z
     .string()
     .min(5, "A descrição precisa de mais detalhes.")
-    .max(300)
+    .max(300, "A descrição não pode ter mais de 300 caracteres.")
     .optional()
     .nullable(),
   vaccinated: z.boolean(),

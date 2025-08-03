@@ -35,6 +35,12 @@ enum PetStatus {
   adopted
 }
 
+enum AdoptionRequestStatus {
+  pending
+  accepted
+  rejected
+}
+
 model User {
   id                   String    @id @default(uuid())
   full_name            String
@@ -50,6 +56,9 @@ model User {
     // --- Mapeamento e Relations ---
   @@map("users")
   pets                 Pet[] 
+  adoptionRequests     AdoptionRequest[]
+  adoptions            Adoption[]
+  favoritedPet         FavoritedPet[]
 }
 
 model Pet {
@@ -75,6 +84,9 @@ model Pet {
     // --- Mapeamento e Relations ---
   @@map("pets")
   owner                User             @relation(fields: [owner_id], references: [id])
+  adoptionRequests     AdoptionRequest[]
+  adoptions            Adoption? 
+  favoritedPet         FavoritedPet[]
 }
 
 model Notification {
@@ -89,3 +101,54 @@ model Notification {
   // --- Mapeamento e Relations ---
   @@map("notifications")
 }
+
+model AdoptionRequest {
+  id                   String    @id @default(uuid())
+  pet_id               String          
+  request_user_id      String             
+  status               AdoptionRequestStatus
+  message              String
+  created_at           DateTime  @default(now()) @db.Timestamptz 
+  updated_at           DateTime? @updatedAt @db.Timestamptz 
+
+  // --- Mapeamento e Relations ---
+  @@map("adoption_requests")
+  pet                  Pet              @relation(fields: [pet_id], references: [id])
+  user                 User             @relation(fields: [request_user_id], references: [id])
+
+  // --- Unique Constraint  ---
+  @@unique([pet_id, request_user_id])
+}
+
+model Adoption {
+  id                   String    @id @default(uuid())
+  pet_id               String    @unique
+  adopter_id           String         
+  status               AdoptionRequestStatus
+  created_at           DateTime  @default(now()) @db.Timestamptz 
+  updated_at           DateTime? @updatedAt @db.Timestamptz 
+
+  // --- Mapeamento e Relations ---
+  @@map("adoptions")
+  pet                  Pet             @relation(fields: [pet_id], references: [id])
+  user                 User            @relation(fields: [adopter_id], references: [id])
+
+  // --- Unique Constraint  ---
+  @@unique([pet_id, adopter_id])
+}
+
+model FavoritedPet {
+  id          String    @id @default(uuid())
+  user_id     String     
+  pet_id      String   
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // --- Mapeamento e Relations ---
+  @@map("favorited_pets")
+  user       User     @relation(fields: [user_id], references: [id])
+  pet        Pet      @relation(fields: [pet_id], references: [id])
+
+  // --- Unique Constraint  ---
+  @@unique([user_id, pet_id]) 
+}
+

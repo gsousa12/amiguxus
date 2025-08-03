@@ -21,3 +21,6 @@ export const GetPetsQuerySchema = Type.Intersect([
 ]);
 
 export type GetPetsQuerySchemaType = Static<typeof GetPetsQuerySchema>;
+
+export const GetMyPetsQuerySchema = Type.Pick(PaginationSchema, ["page"]);
+export type GetMyPetsQuerySchemaType = Static<typeof GetMyPetsQuerySchema>;

@@ -1,7 +1,5 @@
 import { PetStatus, Prisma } from "@prisma/client";
 import { prisma } from "database/clients/prisma";
-import { GetPetsQuerySchemaType } from "../schemas";
-import { CommonSchemasType } from "common/schemas/common.schemas";
 
 const create = async (data: Prisma.PetUncheckedCreateInput) => {
   return await prisma.pet.create({
@@ -10,19 +8,15 @@ const create = async (data: Prisma.PetUncheckedCreateInput) => {
 };
 
 const findAll = async (filters: any, pagination: any) => {
-  // 1. Define a configuração da paginação
   const page_size = 20;
   const { page } = pagination;
   const skip = (page - 1) * page_size;
   const take = page_size;
 
-  // 2. Constrói a cláusula 'where' dinamicamente a partir dos filtros
   const where: Prisma.PetWhereInput = {
-    // Por padrão, buscamos apenas pets disponíveis para adoção
     status: PetStatus.available,
   };
 
-  // Adiciona filtros de string (com busca case-insensitive)
   if (filters.name) {
     where.name = { contains: filters.name, mode: "insensitive" };
   }
@@ -33,10 +27,9 @@ const findAll = async (filters: any, pagination: any) => {
     where.city = { contains: filters.city, mode: "insensitive" };
   }
   if (filters.state) {
-    where.state = { equals: filters.state }; // Estado é um match exato
+    where.state = { equals: filters.state };
   }
 
-  // Adiciona filtros de enum (match exato)
   if (filters.species) {
     where.species = filters.species;
   }
@@ -50,7 +43,6 @@ const findAll = async (filters: any, pagination: any) => {
     where.size = filters.size;
   }
 
-  // Adiciona filtros booleanos
   if (filters.vaccinated !== undefined) {
     where.vaccinated = filters.vaccinated;
   }
@@ -58,14 +50,13 @@ const findAll = async (filters: any, pagination: any) => {
     where.neutered = filters.neutered;
   }
 
-  // 3. Executa as consultas de busca e contagem em paralelo para otimização
   const [pets, total] = await Promise.all([
     prisma.pet.findMany({
       where,
       skip,
       take,
       orderBy: {
-        created_at: "desc", // Opcional: ordenar pelos mais recentes
+        created_at: "desc",
       },
     }),
     prisma.pet.count({
@@ -73,7 +64,36 @@ const findAll = async (filters: any, pagination: any) => {
     }),
   ]);
 
-  // 4. Retorna os dados paginados e o total de registros
+  return {
+    data: pets,
+    total,
+  };
+};
+
+const findByOwnerId = async (ownerId: string, pagination: any) => {
+  const page_size = 20;
+  const { page } = pagination;
+  const skip = (page - 1) * page_size;
+  const take = page_size;
+
+  const [pets, total] = await Promise.all([
+    prisma.pet.findMany({
+      where: {
+        owner_id: ownerId,
+      },
+      skip,
+      take,
+      orderBy: {
+        created_at: "desc",
+      },
+    }),
+    prisma.pet.count({
+      where: {
+        owner_id: ownerId,
+      },
+    }),
+  ]);
+
   return {
     data: pets,
     total,
@@ -83,4 +103,5 @@ const findAll = async (filters: any, pagination: any) => {
 export const petsRepository = {
   create,
   findAll,
+  findByOwnerId,
 };
