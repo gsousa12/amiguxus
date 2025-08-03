@@ -1,5 +1,4 @@
 import { Pet } from "@/common/types/pets.entity";
-import { ApiResponse, getApiResponse } from "../get-api-response";
 import { GetPetListRequest } from "../interfaces/pets-api-interfaces";
 import { api } from "../axios";
 import { PaginatedApiResponse } from "../interfaces/pagination.interfaces";
