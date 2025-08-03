@@ -8,6 +8,7 @@ export {
 export {
   CreatePetResponseSchema,
   CreatePetResponseSchemaType,
+  UploadPetImageResponseSchema,
 } from "./pets.response.schemas";
 
 export {

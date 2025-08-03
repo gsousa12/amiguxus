@@ -21,4 +21,9 @@ export const environment = {
   REDIS_PORT: getEnvAsInt("REDIS_PORT", 6379),
   REDIS_PASSWORD: process.env.REDIS_PASSWORD || "",
   COOKIE_SECRET: getEnv("COOKIE_SECRET"),
+  MINIO_ENDPOINT: process.env.MINIO_ENDPOINT || "http://localhost",
+  MINIO_PORT: getEnvAsInt("MINIO_PORT", 9000),
+  MINIO_ACCESS_KEY: getEnv("MINIO_ACCESS_KEY"),
+  MINIO_SECRET_KEY: getEnv("MINIO_SECRET_KEY"),
+  MINIO_BUCKET_NAME: getEnv("MINIO_BUCKET_NAME"),
 };

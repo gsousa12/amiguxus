@@ -49,6 +49,24 @@ services:
       timeout: 20s
       retries: 3
 
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    networks:
+      - amiguxus-net
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Aguardando MinIO ficar pronto...';
+      sleep 5;
+      /usr/bin/mc alias set local http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb local/amiguxus-pets --ignore-existing;
+      echo 'Definindo política de acesso pública...';
+      /usr/bin/mc anonymous set public local/amiguxus-pets;
+      echo 'Configuração do MinIO concluída.';
+      exit 0;
+      "
+
 volumes:
   amiguxus_postgres_data:
     driver: local

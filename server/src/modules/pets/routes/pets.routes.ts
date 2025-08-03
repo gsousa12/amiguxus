@@ -5,10 +5,12 @@ import {
   CreatePetResponseSchema,
   GetPetsQuerySchema,
   PetEntitySchema,
+  UploadPetImageResponseSchema,
 } from "../schemas";
 import {
   createPetHandler,
   getPetsHandler,
+  uploadPetImageHandler,
 } from "../controller/pets.controller";
 import { createResponsePaginedSchema } from "common/utils/create-response.schema";
 
@@ -40,5 +42,20 @@ export const petRoutes = async (fastify: FastifyInstance) => {
       },
     },
     handler: getPetsHandler,
+  });
+
+  fastify.route({
+    method: "POST",
+    url: "/upload-image",
+    schema: {
+      description: "Faz o upload de uma imagem de pet para o bucket.",
+      tags: ["Pets"],
+      consumes: ["multipart/form-data"], // Informa que a rota espera um multipart
+      response: {
+        200: UploadPetImageResponseSchema,
+      },
+    },
+    preHandler: fastify.authenticate, // Mantém a rota protegida
+    handler: uploadPetImageHandler, // 3. Aponta para o handler correto
   });
 };
