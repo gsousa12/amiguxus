@@ -55,7 +55,7 @@ export const ImageUploader = ({ value = [], onChange }: ImageUploaderProps) => {
             : "Arraste e solte as fotos ou clique para selecionar"}
         </p>
         <p className="text-xs text-gray-500">
-          Até 3 fotos (PNG, JPG, GIF até 5MB)
+          Até 3 fotos (.jpg, .jpeg, .png ou .webp)
         </p>
       </div>
 

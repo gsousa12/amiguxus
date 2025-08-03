@@ -201,7 +201,7 @@ export const PetRegisterForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Descrição (Opcional)</FormLabel>
+              <FormLabel>Descrição</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Conte um pouco sobre o pet..."
