@@ -1,0 +1,15 @@
+meta {
+  name: Pet Images Upload
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/pets/upload-image
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  image: @file(C:\Users\wgsou\OneDrive\Área de Trabalho\images.png) @contentType(text)
+}
