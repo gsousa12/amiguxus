@@ -54,6 +54,7 @@ export const CommonSchemas = Type.Object({
     },
   }),
 });
+export type CommonSchemasType = Static<typeof CommonSchemas>;
 
 export const PaginationSchema = Type.Object({
   page: Type.Integer({
@@ -66,7 +67,7 @@ export const PaginationSchema = Type.Object({
   }),
 });
 
-export type CommonSchemasType = Static<typeof PaginationSchema>;
+export type PaginationSchemaType = Static<typeof PaginationSchema>;
 
 export const TimeStampSchema = Type.Object({
   created_at: Type.String({

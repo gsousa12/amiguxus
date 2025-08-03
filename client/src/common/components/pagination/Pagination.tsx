@@ -10,6 +10,7 @@ type PaginationProps = {
   currentPage: number;
   totalPages: number;
   totalItems: number;
+  perPage: number; // <-- Adicione a prop
   onPageChange: (page: number) => void;
 };
 
@@ -18,15 +19,16 @@ export const Pagination = ({
   totalPages,
   totalItems,
   onPageChange,
+  perPage,
 }: PaginationProps) => {
   const canGoPrevious = currentPage > 1;
   const canGoNext = currentPage < totalPages;
-  const pageSize = 10;
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
       <div className="text-sm text-muted-foreground">
-        Mostrando {(currentPage - 1) * pageSize + 1} -{" "}
-        {totalPages !== 0 ? Math.min(currentPage * pageSize, totalItems) : 1} de{" "}
+        {/* Use 'perPage' aqui */}
+        Mostrando {(currentPage - 1) * perPage + 1} -{" "}
+        {totalPages !== 0 ? Math.min(currentPage * perPage, totalItems) : 1} de{" "}
         {totalItems} itens
       </div>
       <div className="flex items-center gap-2">

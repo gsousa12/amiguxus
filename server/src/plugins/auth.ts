@@ -6,7 +6,6 @@ import {
 } from "fastify";
 import fp from "fastify-plugin";
 import fastifyJwt from "@fastify/jwt";
-import fastifyCookie from "@fastify/cookie";
 import { environment } from "common/config/environment";
 
 export interface UserPayload {
@@ -29,8 +28,6 @@ declare module "@fastify/jwt" {
 }
 
 const authPlugin = async (app: FastifyInstance) => {
-  app.register(fastifyCookie);
-
   app.register(fastifyJwt, {
     secret: environment.JWT_SECRET,
     cookie: {
@@ -56,4 +53,7 @@ const authPlugin = async (app: FastifyInstance) => {
   );
 };
 
-export default fp(authPlugin);
+export default fp(authPlugin, {
+  name: "auth-plugin",
+  dependencies: ["@fastify/cookie"],
+});

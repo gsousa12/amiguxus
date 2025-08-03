@@ -29,15 +29,13 @@ export const registerDispatch = async (
 export const getUserInformationDispatch = async (): Promise<
   ApiResponse<getUserInformationResponse>
 > => {
-  const response = await api.get("/user/information");
+  const response = await api.get("/users/informations");
   return response.data;
 };
 
-export const validateUserDispatch = async (
-  userId: number | null
-): Promise<boolean> => {
+export const validateUserDispatch = async (): Promise<boolean> => {
   try {
-    await api.post("/auth/validate", { userId });
+    await api.post("/users/validate");
     return true;
   } catch {
     return false;

@@ -21,7 +21,7 @@ const PetCard = ({ pet, onClick }: { pet: Pet; onClick: () => void }) => (
     className="group relative h-72 cursor-pointer overflow-hidden rounded-lg shadow transition hover:-translate-y-1"
   >
     <img
-      src={pet.imagesUrls[0]}
+      src={pet.images_urls[0]}
       alt={pet.name}
       className="h-full w-full object-cover"
     />

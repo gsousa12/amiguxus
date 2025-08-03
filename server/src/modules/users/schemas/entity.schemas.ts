@@ -17,3 +17,9 @@ export const UserEntitySchema = Type.Intersect([
 ]);
 
 export type UserEntitySchemaType = Static<typeof UserEntitySchema>;
+
+export const JWTPayloadSchema = Type.Intersect([
+  Type.Pick(UserEntitySchema, ["id", "full_name", "email"]),
+]);
+
+export type JWTPayloadSchemaType = Static<typeof JWTPayloadSchema>;

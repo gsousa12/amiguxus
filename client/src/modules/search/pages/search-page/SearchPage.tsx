@@ -38,7 +38,8 @@ export const SearchPage = () => {
           <Pagination
             currentPage={ctrl.page}
             totalPages={ctrl.pagination ? ctrl.pagination.totalPages : 1}
-            totalItems={ctrl.pagination ? ctrl.pagination.totalPages : 0}
+            totalItems={ctrl.pagination ? ctrl.pagination.totalItems : 0}
+            perPage={ctrl.pagination ? ctrl.pagination.perPage : 20}
             onPageChange={ctrl.onPageChange}
           />
         </div>
