@@ -4,12 +4,13 @@ import { workersBuilder } from "workers.builder";
 const build = async () => {
   try {
     console.log("Iniciando aplicação...");
-    const application = applicationBuilder();
+    const application = await applicationBuilder();
     workersBuilder();
     const port = Number(process.env.PORT) || 3000;
 
     await application.listen({
       port: port,
+      host: "0.0.0.0", // Recomendo manter isso para evitar problemas de acesso
     });
 
     console.log(`🌟 Aplicação iniciada no ambiente: ${process.env.NODE_ENV}`);

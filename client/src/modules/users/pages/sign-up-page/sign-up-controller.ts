@@ -12,10 +12,10 @@ export const useSignUpController = () => {
   const onSignUp = async (data: SignUpFormValues) => {
     await registerMutation(
       {
-        name: data.name,
+        full_name: data.name,
         email: data.email,
         password: data.password,
-        phoneNumber: data.phoneNumber,
+        phone: data.phoneNumber,
         city: data.city,
         state: data.state,
       },

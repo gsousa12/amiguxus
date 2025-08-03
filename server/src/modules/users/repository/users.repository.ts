@@ -17,7 +17,16 @@ const create = async (data: Prisma.UserCreateInput): Promise<User> => {
   return user;
 };
 
+const findById = async (id: string): Promise<User | null> => {
+  return await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
 export const userRepository = {
   findByEmail,
   create,
+  findById,
 };

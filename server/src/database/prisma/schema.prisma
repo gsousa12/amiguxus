@@ -54,7 +54,7 @@ model User {
 
 model Pet {
   id                   String    @id @default(uuid())
-  ownerId              String    @default(uuid())
+  owner_id              String    @default(uuid())
   name                 String
   species              PetSpecies
   breed                String?
@@ -65,15 +65,16 @@ model Pet {
   vaccinated           Boolean
   neutered             Boolean
   status               PetStatus
-  imagesUrls           String[]
+  images_urls           String[]
   city                 String
   state                String
   created_at           DateTime  @default(now()) @db.Timestamptz 
   updated_at           DateTime? @updatedAt @db.Timestamptz 
+  deleted_at           DateTime? @db.Timestamptz 
 
     // --- Mapeamento e Relations ---
   @@map("pets")
-  owner                User             @relation(fields: [ownerId], references: [id])
+  owner                User             @relation(fields: [owner_id], references: [id])
 }
 
 model Notification {

@@ -3,6 +3,7 @@ import { CreateUserBodySchemaType } from "../schemas";
 import * as bcrypt from "bcrypt";
 import { userRepository } from "../repository/users.repository";
 import { createErrorResponse, createSuccessResponse } from "common/utils";
+
 export const createUserHandler = async (
   request: FastifyRequest<{ Body: CreateUserBodySchemaType }>,
   reply: FastifyReply

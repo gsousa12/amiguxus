@@ -19,7 +19,7 @@ export const registerDispatch = async (
   request: RegisterRequest
 ): Promise<null> => {
   try {
-    await api.post("/user/signup/", request);
+    await api.post("/users/create/", request);
     return null;
   } catch (error) {
     throw error;

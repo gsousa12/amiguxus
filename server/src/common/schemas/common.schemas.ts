@@ -1,4 +1,4 @@
-import { Type } from "@sinclair/typebox";
+import { Static, Type } from "@sinclair/typebox";
 
 export const CommonSchemas = Type.Object({
   id: Type.String({
@@ -7,7 +7,12 @@ export const CommonSchemas = Type.Object({
       format: "O ID fornecido deve ser um UUID válido.",
     },
   }),
-
+  owner_id: Type.String({
+    format: "uuid",
+    errorMessage: {
+      format: "O ID fornecido deve ser um UUID válido.",
+    },
+  }),
   password: Type.String({
     minLength: 6,
     maxLength: 100,
@@ -50,6 +55,19 @@ export const CommonSchemas = Type.Object({
   }),
 });
 
+export const PaginationSchema = Type.Object({
+  page: Type.Integer({
+    minimum: 1,
+    default: 1,
+    description: "O número da página para a qual navegar.",
+    errorMessage: {
+      minimum: "O número da página deve ser pelo menos 1.",
+    },
+  }),
+});
+
+export type CommonSchemasType = Static<typeof PaginationSchema>;
+
 export const TimeStampSchema = Type.Object({
   created_at: Type.String({
     format: "date-time",
@@ -59,6 +77,10 @@ export const TimeStampSchema = Type.Object({
   }),
 
   updated_at: Type.Optional(
+    Type.Union([Type.String({ format: "date-time" }), Type.Null()])
+  ),
+
+  deleted_at: Type.Optional(
     Type.Union([Type.String({ format: "date-time" }), Type.Null()])
   ),
 });

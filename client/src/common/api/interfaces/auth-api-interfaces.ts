@@ -12,10 +12,10 @@ export interface getUserInformationResponse {
 }
 
 export interface RegisterRequest {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  phoneNumber: string;
+  phone: string;
   city: string;
   state: string;
 }
