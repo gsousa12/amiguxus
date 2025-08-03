@@ -19,7 +19,7 @@ export const SearchPage = () => {
 
         <div className="flex-1">
           <MobileFiltersButton {...ctrl.filterProps} />
-
+          {/* <button>Cadastra Amiguxu</button> Botão deve ficar aqui só que a direita */}
           <AppliedFiltersBar
             applied={ctrl.appliedFilters}
             onRemove={ctrl.onRemoveFilter}
@@ -38,7 +38,8 @@ export const SearchPage = () => {
           <Pagination
             currentPage={ctrl.page}
             totalPages={ctrl.pagination ? ctrl.pagination.totalPages : 1}
-            totalItems={ctrl.pagination ? ctrl.pagination.totalPages : 0}
+            totalItems={ctrl.pagination ? ctrl.pagination.totalItems : 0}
+            perPage={ctrl.pagination ? ctrl.pagination.perPage : 20}
             onPageChange={ctrl.onPageChange}
           />
         </div>

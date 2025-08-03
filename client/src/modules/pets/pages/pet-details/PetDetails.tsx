@@ -37,6 +37,10 @@ export const PetDetailsPage = () => {
     };
   }, [carouselApi]);
 
+  if (!pet) {
+    return null;
+  }
+
   return (
     <div className="container mx-auto space-y-8 px-4 py-6">
       <Carousel
@@ -45,7 +49,7 @@ export const PetDetailsPage = () => {
         className="relative w-full overflow-hidden rounded-md shadow"
       >
         <CarouselContent>
-          {pet.imagesUrls.map((url: any, idx: any) => (
+          {pet.images_urls.map((url: any, idx: any) => (
             <CarouselItem
               key={idx}
               className={cn(

@@ -8,7 +8,7 @@ import {
 
 export type Pet = {
   id: string;
-  ownerId: number;
+  owner_id: number;
   name: string;
   species: EPetSpecies;
   breed: string | null;
@@ -19,9 +19,9 @@ export type Pet = {
   vaccinated: boolean;
   neutered: boolean;
   status: EPetStatus;
-  imagesUrls: string[];
+  images_urls: string[];
   city: string;
   state: string;
-  createdAt: Date;
-  updatedAt: Date | null;
+  created_at: Date;
+  updated_at: Date | null;
 };

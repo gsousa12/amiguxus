@@ -7,6 +7,7 @@ import {
 } from "@/common/types/pets.enums";
 import { Pet } from "@/common/types/pets.entity";
 import { getPetListQuery } from "@/common/api/queries/search/pets-queries";
+import { useNavigate } from "react-router-dom";
 
 export interface FiltersState {
   species?: EPetSpecies;
@@ -17,9 +18,11 @@ export interface FiltersState {
   vaccinated: boolean;
   neutered: boolean;
 }
+
 interface PaginationInfo {
   totalPages: number;
   totalItems: number;
+  perPage: number;
 }
 
 export const speciesLabels: Record<EPetSpecies, string> = {
@@ -69,6 +72,7 @@ export const mapFiltersToQuery = (f: FiltersState) => ({
 export const useSearchPageController = () => {
   const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   const {
     data: petListData,
@@ -81,7 +85,17 @@ export const useSearchPageController = () => {
 
   const pets: Pet[] = petListData?.data ?? [];
 
-  const pagination: PaginationInfo | undefined = petListData?.pagination;
+  const pagination: PaginationInfo | undefined = useMemo(() => {
+    if (!petListData?.meta) {
+      return undefined;
+    }
+
+    return {
+      totalPages: petListData.meta.lastPage,
+      totalItems: petListData.meta.total,
+      perPage: petListData.meta.perPage,
+    };
+  }, [petListData]);
 
   const appliedFilters = useMemo(() => {
     const map: Record<string, string | undefined> = {
@@ -114,6 +128,9 @@ export const useSearchPageController = () => {
     }
   };
 
+  const onCardClick = (pet: Pet) => {
+    navigate("/details", { state: { pet } });
+  };
   return {
     pets,
     pagination,
@@ -123,6 +140,6 @@ export const useSearchPageController = () => {
     appliedFilters,
     onRemoveFilter,
     onPageChange: setPage,
-    onCardClick: (pet: Pet) => console.log("click card", pet.id),
+    onCardClick,
   };
 };

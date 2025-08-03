@@ -39,7 +39,6 @@ export const petRoutes = async (fastify: FastifyInstance) => {
         200: createResponsePaginedSchema(PetEntitySchema),
       },
     },
-    preHandler: fastify.authenticate,
     handler: getPetsHandler,
   });
 };

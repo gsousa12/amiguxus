@@ -1,11 +1,11 @@
 import { Pet } from "@/common/types/pets.entity";
-import { ApiResponse, getApiResponse } from "../get-api-response";
 import { GetPetListRequest } from "../interfaces/pets-api-interfaces";
 import { api } from "../axios";
+import { PaginatedApiResponse } from "../interfaces/pagination.interfaces";
 
 export const getPetListDispatch = async (
   request: GetPetListRequest
-): Promise<ApiResponse<Pet[]>> => {
+): Promise<PaginatedApiResponse<Pet[]>> => {
   const {
     page,
     name,
@@ -20,7 +20,7 @@ export const getPetListDispatch = async (
     state,
   } = request;
 
-  const response = await api.get("/pet/", {
+  const response = await api.get("/pets/get-pets", {
     params: {
       page,
       name,
@@ -36,5 +36,5 @@ export const getPetListDispatch = async (
     },
   });
 
-  return getApiResponse<Pet[]>(response.data, []);
+  return response.data;
 };

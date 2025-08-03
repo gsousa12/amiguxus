@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const location = useLocation();
 
   const checkAuth = useCallback(async () => {
-    const ok = await validateUserDispatch(getUserId());
+    const ok = await validateUserDispatch();
     setIsAuth(ok);
   }, []);
 

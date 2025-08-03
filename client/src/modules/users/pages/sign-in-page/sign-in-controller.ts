@@ -16,7 +16,7 @@ export const useSignInPageController = () => {
       {
         onSuccess: async () => {
           const { data: user } = await getUserInformationDispatch();
-          sessionStorage.setItem("user", JSON.stringify(user));
+          // sessionStorage.setItem("user", JSON.stringify(user));
           setUser(user);
           setAuthenticated(true);
           navigate("/home", { replace: true });

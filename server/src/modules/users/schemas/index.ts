@@ -3,3 +3,8 @@ export {
   CreateUserBodySchema,
   CreateUserBodySchemaType,
 } from "./users.body.schemas";
+
+export {
+  CreateUserResponseSchema,
+  GetUserInformationResponse,
+} from "./response.schemas";
