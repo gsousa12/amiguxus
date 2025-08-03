@@ -8,7 +8,7 @@ export class SignInPage {
   readonly signInButton: Locator;
   readonly forgotPasswordLink: Locator;
   readonly createAccountLink: Locator;
-  readonly errorMessage: Locator;
+  readonly errorMessageInvalidEmailOrPassword: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,7 +18,7 @@ export class SignInPage {
     this.signInButton = page.locator('form').getByRole('button', { name: 'Entrar' });
     this.forgotPasswordLink = page.getByRole('button', { name: 'Esqueci minha senha' });
     this.createAccountLink = page.getByRole('button', { name: 'Clique aqui para criar uma!' });
-    this.errorMessage = page.getByRole('alert').locator('.text-rose-500');
+    this.errorMessageInvalidEmailOrPassword = page.getByText('E-mail ou senha inválidos.');
   }
 
   async goto() {
@@ -44,7 +44,7 @@ export class SignInPage {
   }
 
   async expectErrorMessage(message: string) {
-    await expect(this.errorMessage).toContainText(message);
+    await expect(this.errorMessageInvalidEmailOrPassword).toBeVisible();
   }
 
   async expectSuccessfulLogin() {

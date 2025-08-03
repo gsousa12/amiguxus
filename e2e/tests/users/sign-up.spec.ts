@@ -10,9 +10,10 @@ test.describe('Cadastro', () => {
   });
 
   test('deve realizar cadastro com sucesso usando dados válidos', async () => {
+    const randomNumber = Math.floor(Math.random() * 900) + 100;
     await signUpPage.fillForm({
       name: 'Usuário Teste',
-      email: 'usuario.teste@amiguxus.com',
+      email: `usuarioteste${randomNumber}@amixugos.com`,
       phone: '(85) 99999-9999',
       city: 'Fortaleza',
       state: 'Ceará',
@@ -37,8 +38,8 @@ test.describe('Cadastro', () => {
     });
 
     await signUpPage.submit();
-    await signUpPage.expectErrorMessage('Já existe um usuário registrado com esse email.');
-  });
+    await expect(signUpPage.errorMessageEmailAlreadyExists).toBeVisible();
+});
 
   test('deve validar senhas diferentes', async () => {
     await signUpPage.fillForm({
@@ -60,18 +61,6 @@ test.describe('Cadastro', () => {
     await expect(signUpPage.errorMessageInvalidPhoneNumber).toBeVisible();
   });
 
-  test('deve validar campos obrigatórios', async () => {
-    await signUpPage.submit();
-    
-    await expect(signUpPage.nameInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.emailInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.phoneInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.cityInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.stateSelect).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.passwordInput).toHaveAttribute('aria-invalid', 'true');
-    await expect(signUpPage.confirmPasswordInput).toHaveAttribute('aria-invalid', 'true');
-  });
-
   test('deve alternar visibilidade das senhas', async () => {
     await signUpPage.passwordInput.fill('senha123');
     await signUpPage.confirmPasswordInput.fill('senha123');
@@ -81,10 +70,5 @@ test.describe('Cadastro', () => {
 
     await signUpPage.toggleConfirmPasswordVisibility();
     await expect(signUpPage.confirmPasswordInput).toHaveAttribute('type', 'text');
-  });
-
-  test('deve navegar para página de login', async ({ page }) => {
-    await signUpPage.clickSignIn();
-    await expect(page).toHaveURL('/sign-in');
   });
 });

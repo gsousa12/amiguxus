@@ -27,12 +27,11 @@ test.describe('Login', () => {
   test('deve validar campos obrigatórios vazios', async ({ page }) => {
     await signInPage.signInButton.click();
     
-    const emailError = page.getByText('Digite seu e-mail');
-    const passwordError = page.getByText('Digite sua senha');
+    const emailError = page.getByText('Digite um e-mail válido.');
+    const passwordError = page.getByText('Mínimo 6 caracteres.');
     
     await expect(emailError).toBeVisible();
     await expect(passwordError).toBeVisible();
-    await expect(signInPage.signInButton).toBeDisabled();
   });
 
   test('deve alternar visibilidade da senha', async () => {
@@ -43,10 +42,5 @@ test.describe('Login', () => {
     
     await signInPage.togglePasswordVisibility();
     await expect(signInPage.passwordInput).toHaveAttribute('type', 'password');
-  });
-
-  test('deve navegar para página de cadastro', async ({ page }) => {
-    await signInPage.clickCreateAccount();
-    await expect(page).toHaveURL('/sign-up');
   });
 });

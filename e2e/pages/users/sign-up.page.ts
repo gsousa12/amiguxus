@@ -12,10 +12,11 @@ export class SignUpPage {
   readonly showPasswordButton: Locator;
   readonly showConfirmPasswordButton: Locator;
   readonly signUpButton: Locator;
-  readonly errorMessageInvalidPhoneNumber: Locator;
   readonly signInLink: Locator;
-  readonly errorMessageDifferentPasswords: Locator;
   readonly successMessage: Locator;
+  readonly errorMessageDifferentPasswords: Locator;
+  readonly errorMessageInvalidPhoneNumber: Locator;
+  readonly errorMessageEmailAlreadyExists: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,15 +25,16 @@ export class SignUpPage {
     this.phoneInput = page.getByPlaceholder('(99) 99999-9999');
     this.cityInput = page.getByPlaceholder('Sua cidade');
     this.stateSelect = page.locator('select[aria-hidden="true"]');
-    this.passwordInput = page.getByPlaceholder('●●●●●●').first();
-    this.confirmPasswordInput = page.getByPlaceholder('●●●●●●').last();
-    this.showPasswordButton = page.getByRole('button', { name: /mostrar senha/i }).first();
-    this.showConfirmPasswordButton = page.getByRole('button', { name: /mostrar senha/i }).last();
+    this.passwordInput = page.locator('input[name="password"]');
+    this.confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+    this.showPasswordButton = page.locator('div').filter({ hasText: /^Senha$/ }).getByRole('button');
+    this.showConfirmPasswordButton = page.locator('div').filter({ hasText: /^Confirmar senha$/ }).getByRole('button');
     this.signUpButton = page.locator('form').getByRole('button', { name: 'Cadastrar' })
     this.signInLink = page.getByRole('button', { name: 'Clique aqui para entrar!' });
     this.errorMessageInvalidPhoneNumber = page.getByText('Telefone inválido.');
     this.errorMessageDifferentPasswords = page.getByText('Senhas diferentes.');
     this.successMessage = page.getByText('Cadastro concluído com sucesso.');
+    this.errorMessageEmailAlreadyExists = page.getByText('Já existe um usuário registrado com esse email.');
   }
 
   async goto() {
@@ -67,6 +69,7 @@ export class SignUpPage {
 
   async submit() {
     await this.signUpButton.click();
+    await this.page.waitForLoadState('networkidle');
   }
 
   async togglePasswordVisibility() {
