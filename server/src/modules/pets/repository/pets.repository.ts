@@ -9,7 +9,7 @@ const create = async (data: Prisma.PetUncheckedCreateInput) => {
   });
 };
 
-const findAll = async (filters: any, pagination: CommonSchemasType) => {
+const findAll = async (filters: any, pagination: any) => {
   // 1. Define a configuração da paginação
   const page_size = 20;
   const { page } = pagination;
