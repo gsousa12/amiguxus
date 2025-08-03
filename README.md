@@ -31,7 +31,7 @@ Para garantir um desenvolvimento robusto, escalável e de fácil manutenção, u
 
 * **Backend:**
     * **Linguagem/Runtime:** Node.js
-    * **Framework:** NestJS
+    * **Framework:** Fastify
     * **ORM:** Prisma (para interação eficiente com o banco de dados)
 * **Frontend:**
     * **Framework:** React
