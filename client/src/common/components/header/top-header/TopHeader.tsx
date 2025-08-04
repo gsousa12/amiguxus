@@ -1,21 +1,42 @@
 import React, { useState } from "react";
-import { PawPrint, Menu, X, Bell, LogOut } from "lucide-react";
-import { useAuth } from "../../contexts/auth-context";
+import { PawPrint, Menu, X, Bell, LogOut, User } from "lucide-react";
 import { useMobileDetect } from "@/common/hooks/use-mobile-detect";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import { getOnlyFirstName, getUserName } from "@/common/lib/utils";
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
+import { useAuthStore } from "@/common/stores/auth/auth-store";
+import { getOnlyFirstName } from "@/common/lib/utils";
+
+export interface IconButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  tooltip?: string;
+}
+
+export const IconButton = React.forwardRef<
+  HTMLButtonElement,
+  React.PropsWithChildren<IconButtonProps>
+>(({ children, tooltip, className = "", ...props }, ref) => (
+  <button
+    ref={ref}
+    title={tooltip}
+    className={`
+      cursor-pointer rounded-md p-2 text-gray-800 transition
+      hover:bg-gray-100 ${className}
+    `}
+    {...props}
+  >
+    {children}
+  </button>
+));
+
+IconButton.displayName = "IconButton";
 
 export const TopHeader: React.FC = () => {
-  const { isAuth } = useAuth();
-  const authenticated = !!isAuth;
-
-  const username = getUserName();
   const isMobile = useMobileDetect();
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((p) => !p);
@@ -27,72 +48,86 @@ export const TopHeader: React.FC = () => {
           <DonateButton onClick={() => {}} />
           <Logo className="absolute left-1/2 -translate-x-1/2" />
           {!isMobile ? (
-            <DesktopActions isAuth={authenticated} username={username} />
+            <DesktopActions />
           ) : (
-            <MobileActions
-              isAuth={authenticated}
-              menuOpen={menuOpen}
-              toggleMenu={toggleMenu}
-            />
+            <MobileActions menuOpen={menuOpen} toggleMenu={toggleMenu} />
           )}
         </div>
       </header>
 
-      {isMobile && menuOpen && (
-        <MobileOverlay isAuth={authenticated} toggleMenu={toggleMenu} />
-      )}
+      {isMobile && menuOpen && <MobileOverlay toggleMenu={toggleMenu} />}
     </>
   );
 };
 
-const DesktopActions = ({
-  isAuth,
-  username,
-}: {
-  isAuth: boolean;
-  username: string | null;
-}) => {
+// --- DesktopActions ---
+export const DesktopActions: React.FC = () => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
+
   const navigateToRegisterPet = () => {
-    if (!isAuth) {
+    if (!isAuthenticated) {
       navigate("/home");
       return;
     }
     navigate("/register");
   };
-  const handleLogout = () => {
+
+  const handleLogout = async () => {
     try {
-      logoutDispatch();
-      sessionStorage.removeItem("user");
-      window.location.href = "/";
-    } catch (error) {}
+      await logoutDispatch();
+    } finally {
+      logout();
+    }
   };
+
   return (
     <div className="ml-auto flex items-center gap-4">
-      {!isAuth ? (
+      {!isAuthenticated ? (
         <>
           <LoginButton />
           <RegisterButton />
         </>
       ) : (
         <>
-          {isAuth && (
-            <button
-              className="hover:cursor-pointer"
-              onClick={navigateToRegisterPet}
-            >
-              Cadastrar Pet
-            </button>
-          )}
-          <NotificationBell />
-          <DogAvatar />
-          {username && (
+          {/* {user && (
             <span className="text-sm font-medium text-gray-800">
-              Olá, {getOnlyFirstName(username)}
+              Olá, {getOnlyFirstName(user.full_name)}
             </span>
-          )}
+          )} */}
+
+          <NotificationBell />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <IconButton tooltip="Perfil">
+                <User className="h-5 w-5 text-rose-500" />
+              </IconButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              sideOffset={4}
+              className="w-40 bg-white border border-rose-100 hover:cursor-pointer shadow-lg"
+            >
+              <DropdownMenuItem
+                onSelect={navigateToRegisterPet}
+                className="px-4 py-2 hover:bg-rose-50 hover:cursor-pointer text-gray-700"
+              >
+                Cadastrar Pet
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {}}
+                className="px-4 py-2 hover:bg-rose-50 hover:cursor-pointer text-gray-700"
+              >
+                Meus Pets
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <IconButton onClick={handleLogout} tooltip="Sair">
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-5 w-5 text-rose-500" />
           </IconButton>
         </>
       )}
@@ -100,57 +135,83 @@ const DesktopActions = ({
   );
 };
 
-const MobileActions = ({
-  menuOpen,
-  toggleMenu,
-}: {
-  isAuth: boolean;
+// --- MobileActions ---
+const MobileActions: React.FC<{
   menuOpen: boolean;
   toggleMenu: () => void;
-}) => (
+}> = ({ menuOpen, toggleMenu }) => (
   <div className="ml-auto flex items-center gap-2">
     <NotificationBell />
     <HamburgerButton open={menuOpen} onClick={toggleMenu} />
   </div>
 );
 
-const MobileOverlay = ({
-  isAuth,
+// --- MobileOverlay ---
+const MobileOverlay: React.FC<{ toggleMenu: () => void }> = ({
   toggleMenu,
-}: {
-  isAuth: boolean;
-  toggleMenu: () => void;
-}) => (
-  <div
-    className="fixed inset-0 z-40 flex flex-col bg-white"
-    onClick={toggleMenu}
-  >
-    <button className="self-end p-4 text-gray-800 hover:opacity-70">
-      <X className="h-6 w-6" />
-    </button>
+}) => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const logout = useAuthStore((s) => s.logout);
+  const navigate = useNavigate();
 
-    <nav className="flex flex-col gap-4 px-6">
-      <MenuItem label="Ache um doguinho para adotar" onClick={() => {}} />
-      <MenuItem label="Ache um gatinho para adotar" onClick={() => {}} />
+  const handleLogout = async () => {
+    try {
+      await logoutDispatch();
+    } finally {
+      logout();
+    }
+  };
 
-      {!isAuth ? (
-        <>
-          <MenuItem label="Entrar" onClick={() => {}} />
-          <MenuItem label="Cadastrar" onClick={() => {}} />
-        </>
-      ) : (
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    toggleMenu();
+  };
+
+  return (
+    <div className="fixed inset-0 z-40 flex flex-col bg-white">
+      <button
+        onClick={toggleMenu}
+        className="self-end p-4 text-gray-800 hover:opacity-70"
+      >
+        <X className="h-6 w-6" />
+      </button>
+
+      <nav className="flex flex-col gap-4 px-6">
         <MenuItem
-          label="Sair"
-          icon={LogOut}
-          onClick={() => {}}
-          textColor="text-rose-500"
+          label="Ache um doguinho para adotar"
+          onClick={() => handleNavigate("/search/dog")}
         />
-      )}
-    </nav>
-  </div>
-);
+        <MenuItem
+          label="Ache um gatinho para adotar"
+          onClick={() => handleNavigate("/search/cat")}
+        />
 
-const Logo = ({ className = "" }: { className?: string }) => {
+        {!isAuthenticated ? (
+          <>
+            <MenuItem
+              label="Entrar"
+              onClick={() => handleNavigate("/sign-in")}
+            />
+            <MenuItem
+              label="Cadastrar"
+              onClick={() => handleNavigate("/sign-up")}
+            />
+          </>
+        ) : (
+          <MenuItem
+            label="Sair"
+            icon={LogOut}
+            onClick={handleLogout}
+            textColor="text-rose-500"
+          />
+        )}
+      </nav>
+    </div>
+  );
+};
+
+// --- Components auxiliares ---
+const Logo: React.FC<{ className?: string }> = ({ className = "" }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -163,7 +224,7 @@ const Logo = ({ className = "" }: { className?: string }) => {
   );
 };
 
-const DonateButton = ({ onClick }: { onClick: () => void }) => (
+const DonateButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <button
     onClick={onClick}
     className="cursor-pointer rounded-md border border-yellow-500
@@ -174,7 +235,7 @@ const DonateButton = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
-const LoginButton = () => {
+const LoginButton: React.FC = () => {
   const navigate = useNavigate();
   return (
     <button
@@ -185,7 +246,8 @@ const LoginButton = () => {
     </button>
   );
 };
-const RegisterButton = () => {
+
+const RegisterButton: React.FC = () => {
   const navigate = useNavigate();
   return (
     <button
@@ -198,20 +260,13 @@ const RegisterButton = () => {
   );
 };
 
-const DogAvatar = () => (
-  <div className="h-8 w-15 cursor-pointer overflow-hidden rounded-full">
-    <span className="text-sm">teste</span>
-  </div>
-);
-
-const NotificationBell = () => (
+const NotificationBell: React.FC = () => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <IconButton tooltip="Notificações">
         <Bell className="h-5 w-5" />
       </IconButton>
     </DropdownMenuTrigger>
-
     <DropdownMenuContent align="end" className="w-64">
       <p className="px-4 py-6 text-center text-sm text-gray-500">
         Sem notificações por enquanto.
@@ -220,34 +275,10 @@ const NotificationBell = () => (
   </DropdownMenu>
 );
 
-interface IconButtonProps {
-  onClick?: () => void;
-  tooltip?: string;
-  className?: string;
-}
-const IconButton: React.FC<React.PropsWithChildren<IconButtonProps>> = ({
-  children,
-  onClick,
-  tooltip,
-  className = "",
-}) => (
-  <button
-    onClick={onClick}
-    title={tooltip}
-    className={`cursor-pointer rounded-md p-2 text-gray-800 transition 
-      hover:bg-gray-100 ${className}`}
-  >
-    {children}
-  </button>
-);
-
-const HamburgerButton = ({
-  open,
-  onClick,
-}: {
+const HamburgerButton: React.FC<{
   open: boolean;
   onClick: () => void;
-}) => (
+}> = ({ open, onClick }) => (
   <IconButton onClick={onClick} tooltip="Menu">
     {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
   </IconButton>
@@ -259,7 +290,12 @@ interface MenuItemProps {
   icon?: React.ElementType;
   textColor?: string;
 }
-const MenuItem = ({ label, onClick, icon: Icon, textColor }: MenuItemProps) => (
+const MenuItem: React.FC<MenuItemProps> = ({
+  label,
+  onClick,
+  icon: Icon,
+  textColor,
+}) => (
   <button
     onClick={onClick}
     className={`flex items-center gap-2 rounded-md px-4 py-3 

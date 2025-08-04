@@ -15,13 +15,15 @@ export const useSignInPageController = () => {
       { email: data.email, password: data.password },
       {
         onSuccess: async () => {
-          const { data: user } = await getUserInformationDispatch();
-          // sessionStorage.setItem("user", JSON.stringify(user));
+          const user = await getUserInformationDispatch();
           setUser(user);
           setAuthenticated(true);
           navigate("/home", { replace: true });
         },
-        onError: () => setAuthenticated(false),
+        onError: () => {
+          setAuthenticated(false);
+          setUser(null);
+        },
       }
     );
   };

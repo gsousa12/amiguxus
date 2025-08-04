@@ -1,7 +1,5 @@
 import { api } from "../axios";
-import { ApiResponse } from "../get-api-response";
 import {
-  getUserInformationResponse,
   LoginRequest,
   RegisterRequest,
 } from "../interfaces/auth-api-interfaces";
@@ -26,11 +24,13 @@ export const registerDispatch = async (
   }
 };
 
-export const getUserInformationDispatch = async (): Promise<
-  ApiResponse<getUserInformationResponse>
-> => {
-  const response = await api.get("/users/informations");
-  return response.data;
+export const getUserInformationDispatch = async (): Promise<any> => {
+  const response: any = await api.get("/users/informations");
+  let payload = response.data;
+  while (payload && typeof payload === "object" && "data" in payload) {
+    payload = payload.data;
+  }
+  return payload;
 };
 
 export const validateUserDispatch = async (): Promise<boolean> => {

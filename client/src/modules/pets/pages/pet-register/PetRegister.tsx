@@ -1,19 +1,18 @@
 import { useEffect } from "react";
 import { PetRegisterForm } from "../../components/register-form/PetRegisterForm";
 import { usePetRegisterController } from "./pet-register-controller";
-import { useAuth } from "@/common/components/contexts/auth-context";
+import { useAuthStore } from "@/common/stores/auth/auth-store";
 import { useNavigate } from "react-router-dom";
 
 export const PetRegisterPage = () => {
-  const { isAuth } = useAuth();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/home", { replace: true });
 
-      return;
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/home", { replace: true });
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const { form, onSubmit, isPending } = usePetRegisterController();
 
