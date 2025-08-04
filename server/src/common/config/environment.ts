@@ -26,4 +26,5 @@ export const environment = {
   MINIO_ACCESS_KEY: getEnv("MINIO_ACCESS_KEY"),
   MINIO_SECRET_KEY: getEnv("MINIO_SECRET_KEY"),
   MINIO_BUCKET_NAME: getEnv("MINIO_BUCKET_NAME"),
+  MINIO_PUBLIC_URL: getEnv("MINIO_PUBLIC_URL"),
 };

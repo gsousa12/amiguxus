@@ -143,7 +143,7 @@ export const uploadPetImageHandler = async (
       })
     );
 
-    const fileUrl = `${environment.MINIO_ENDPOINT}:${environment.MINIO_PORT}/${environment.MINIO_BUCKET_NAME}/${uniqueFileName}`;
+    const fileUrl = `${environment.MINIO_PUBLIC_URL}/${environment.MINIO_BUCKET_NAME}/${uniqueFileName}`;
 
     return reply.status(200).send({ url: fileUrl });
   } catch (error) {

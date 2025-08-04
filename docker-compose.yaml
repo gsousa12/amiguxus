@@ -6,35 +6,45 @@ services:
     container_name: amiguxus-db
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: amiguxus_dev
     ports:
       - "5433:5432"
     volumes:
       - amiguxus_postgres_data:/var/lib/postgresql/data
     networks:
       - amiguxus-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d amiguxus_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
     container_name: amiguxus-redis
     restart: always
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+    command: redis-server --requirepass devpassword
     ports:
       - "6379:6379"
     volumes:
       - amiguxus_redis_data:/data
     networks:
       - amiguxus-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "devpassword", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio:latest
     container_name: amiguxus-minio
     restart: always
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: amiguxusminio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -52,20 +62,81 @@ services:
   createbuckets:
     image: minio/mc
     depends_on:
-      - minio
+      minio:
+        condition: service_healthy
     networks:
       - amiguxus-net
     entrypoint: >
       /bin/sh -c "
       echo 'Aguardando MinIO ficar pronto...';
       sleep 5;
-      /usr/bin/mc alias set local http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc alias set local http://minio:9000 minioadmin amiguxusminio;
       /usr/bin/mc mb local/amiguxus-pets --ignore-existing;
       echo 'Definindo política de acesso pública...';
       /usr/bin/mc anonymous set public local/amiguxus-pets;
       echo 'Configuração do MinIO concluída.';
       exit 0;
       "
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: amiguxus-api
+    restart: always
+    environment:
+      PORT: 3333
+      HOST: 0.0.0.0
+      NODE_ENV: development
+      CORS_ORIGIN: http://localhost:3000
+
+      DATABASE_URL: postgresql://devuser:devpassword@postgres:5432/amiguxus_dev?schema=public
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: devpassword
+
+      MINIO_ENDPOINT: http://minio
+      MINIO_PORT: 9000
+      MINIO_USE_SSL: "false"
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: amiguxusminio
+      MINIO_BUCKET_NAME: amiguxus-pets
+      MINIO_PUBLIC_URL: http://localhost:9000
+
+      JWT_SECRET: d07e4ee2ba9f5d603192feb48d2278c2eb500538e7233883a6dcedf6789ded0d
+      COOKIE_SECRET: d07e4ee2ba9f5d603192feb48d2278c2eb500538e7233883a6dcedf6789ded0d
+      API_BASE_URL: http://localhost:3333
+
+      TS_NODE_PROJECT: tsconfig.paths.json
+    ports:
+      - "3333:3333"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - amiguxus-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: amiguxus-client
+    restart: always
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - amiguxus-net
 
 volumes:
   amiguxus_postgres_data:
