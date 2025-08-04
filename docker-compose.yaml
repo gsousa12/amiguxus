@@ -85,34 +85,29 @@ services:
     container_name: amiguxus-api
     restart: always
     environment:
-      # App Config
       PORT: 3333
       HOST: 0.0.0.0
       NODE_ENV: development
       CORS_ORIGIN: http://localhost:3000
 
-      # Database - IMPORTANTE: usar o hostname interno 'postgres'
       DATABASE_URL: postgresql://devuser:devpassword@postgres:5432/amiguxus_dev?schema=public
 
-      # Redis - usando o hostname interno 'redis'
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: devpassword
 
-      # MinIO - usando o hostname interno 'minio'
       MINIO_ENDPOINT: http://minio
       MINIO_PORT: 9000
       MINIO_USE_SSL: "false"
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: amiguxusminio
       MINIO_BUCKET_NAME: amiguxus-pets
+      MINIO_PUBLIC_URL: http://localhost:9000
 
-      # JWT e Cookies
       JWT_SECRET: d07e4ee2ba9f5d603192feb48d2278c2eb500538e7233883a6dcedf6789ded0d
       COOKIE_SECRET: d07e4ee2ba9f5d603192feb48d2278c2eb500538e7233883a6dcedf6789ded0d
       API_BASE_URL: http://localhost:3333
 
-      # tsconfig-paths
       TS_NODE_PROJECT: tsconfig.paths.json
     ports:
       - "3333:3333"
@@ -135,7 +130,6 @@ services:
     container_name: amiguxus-client
     restart: always
     environment:
-      # (aqui não é usado pelo Nginx, mas mantido por padrão)
       VITE_API_URL: ${VITE_API_URL}
     ports:
       - "3000:80"
