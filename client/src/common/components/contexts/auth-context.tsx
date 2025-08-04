@@ -1,5 +1,4 @@
 import { validateUserDispatch } from "@/common/api/dispatch/auth-dispatchs";
-import { getUserId } from "@/common/lib/utils";
 import React, {
   createContext,
   useCallback,
