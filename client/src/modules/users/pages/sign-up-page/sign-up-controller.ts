@@ -22,7 +22,6 @@ export const useSignUpController = () => {
       {
         onSuccess: () => {
           setSuccessPopUp(true);
-          setTimeout(() => navigate("/sign-in", { replace: true }), 1500);
         },
       }
     );

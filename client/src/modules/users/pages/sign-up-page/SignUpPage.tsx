@@ -28,10 +28,10 @@ import {
 import { formatPhone, getStateName, STATE_SIGLAS } from "@/common/lib/utils";
 import { SignUpField } from "../../components/signup-field/SignUpField";
 import { PasswordInput } from "../../components/password-input/PasswordInput";
+import { useNavigate } from "react-router-dom";
 
 export const SignUpPage = () => {
-  const { onSignUp, onGoToSignIn, error, successPopUp, setSuccessPopUp } =
-    useSignUpController();
+  const { onSignUp, onGoToSignIn, error, successPopUp } = useSignUpController();
 
   const {
     register,
@@ -53,10 +53,16 @@ export const SignUpPage = () => {
 
   const [showPwd, setShowPwd] = useState(false);
   const [showPwdC, setShowPwdC] = useState(false);
+  const navigate = useNavigate();
 
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const requestError = !!error;
   const errorMessage = getErrorMessage(error);
+
+  const navigateToLoginPage = () => {
+    setOpenAlertPopup(false);
+    navigate("/sign-in", { replace: true });
+  };
 
   useEffect(() => {
     setOpenAlertPopup(requestError);
@@ -211,7 +217,7 @@ export const SignUpPage = () => {
       {successPopUp && (
         <AlertPopUp
           open={successPopUp}
-          onClose={() => setSuccessPopUp(false)}
+          onClose={navigateToLoginPage}
           title="Sucesso!"
           description="Cadastro concluído com sucesso."
         />

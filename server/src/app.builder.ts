@@ -12,7 +12,7 @@ import swagger from "plugins/swagger";
 import minioPlugin from "plugins/minio";
 
 export const fastifyAppConfiguration: FastifyServerOptions = {
-  logger: true,
+  logger: false,
   ignoreTrailingSlash: true,
   ignoreDuplicateSlashes: true,
 };
@@ -38,7 +38,7 @@ export const applicationBuilder = async () => {
   });
   application.register(errorHandler);
   application.register(auth);
-  application.register(minioPlugin); // Registre o plugin do MinIO aqui
+  application.register(minioPlugin);
   application.register(swagger);
   application.register(router);
 
