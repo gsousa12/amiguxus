@@ -89,6 +89,7 @@ services:
       PORT: 3333
       HOST: 0.0.0.0
       NODE_ENV: development
+      CORS_ORIGIN: http://localhost:3000
 
       # Database - IMPORTANTE: usar o hostname interno 'postgres'
       DATABASE_URL: postgresql://devuser:devpassword@postgres:5432/amiguxus_dev?schema=public
@@ -122,6 +123,24 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+    networks:
+      - amiguxus-net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: amiguxus-client
+    restart: always
+    environment:
+      # (aqui não é usado pelo Nginx, mas mantido por padrão)
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
     networks:
       - amiguxus-net
 
