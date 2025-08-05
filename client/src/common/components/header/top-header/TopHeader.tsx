@@ -124,6 +124,12 @@ export const DesktopActions: React.FC = () => {
               >
                 Meus Pets
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {}}
+                className="px-4 py-2 hover:bg-rose-50 hover:cursor-pointer text-gray-700"
+              >
+                Favoritados
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -267,13 +273,11 @@ export const NotificationBell: React.FC = () => {
     isLoading,
     error,
   } = useNotifications({
-    // dispara refetch a cada 1 minuto, mantendo o cache “stale” também 1 min
     refetchInterval: 1000 * 60,
     staleTime: 1000 * 60,
     retry: 2,
   });
 
-  // Contador de notificações não lidas
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
@@ -295,7 +299,7 @@ export const NotificationBell: React.FC = () => {
         </div>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-64 p-0 overflow-hidden">
+      <DropdownMenuContent align="end" className="w-85 p-0 overflow-hidden">
         {isLoading ? (
           <div className="p-4 text-center text-sm text-gray-500">
             Carregando…

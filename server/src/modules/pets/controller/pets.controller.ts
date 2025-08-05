@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
+  AdoptionRequestBodySchemaType,
   CreatePetBodySchemaType,
   GetMyPetsQuerySchemaType,
   GetPetsQuerySchemaType,
@@ -186,6 +187,53 @@ export const getMyPetsHanlder = async (
       hasPreviousPage: (page ?? 20) > 1,
     },
     data,
+  };
+
+  return reply.status(200).send(response);
+};
+
+export const adoptionRequestHanlder = async (
+  request: FastifyRequest<{ Body: AdoptionRequestBodySchemaType }>,
+  reply: FastifyReply
+) => {
+  const { pet_id, message } = request.body;
+  const userId = request.user.id;
+  if (!userId) {
+    return createErrorResponse(reply, "Usuário não autenticado.", 401);
+  }
+  const pet = await petsRepository.findById(pet_id);
+  if (!pet) {
+    return createErrorResponse(reply, "Pet não encontrado.", 404);
+  }
+
+  if (pet.owner_id === userId) {
+    return createErrorResponse(
+      reply,
+      "Você não pode solicitar a adoção do seu próprio pet.",
+      400
+    );
+  }
+
+  const adoptionRequest = await petsRepository.createAdoptionRequest(
+    userId,
+    pet_id,
+    message
+  );
+
+  await addNotificationJob({
+    title: `Uma solicitação de adoção foi feita para o amiguxu ${pet.name}!`,
+    message: `Seu amiguxu ${pet.name} recebou uma solicitação de adoção. Verifique as solicitações pendentes.`,
+    related_user_id: pet.owner_id,
+  });
+
+  await addNotificationJob({
+    title: "Sua solicitação de adoção foi enviada!",
+    message: `Sua solicitação de adoção para o amiguxu ${pet.name} foi enviada com sucesso!`,
+    related_user_id: userId,
+  });
+
+  const response = {
+    data: adoptionRequest,
   };
 
   return reply.status(200).send(response);

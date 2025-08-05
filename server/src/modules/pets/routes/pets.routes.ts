@@ -1,6 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { createResponseSchema } from "common/utils";
 import {
+  AdoptionRequestBodySchema,
+  AdoptionRequestResponseSchema,
   CreatePetBodySchema,
   CreatePetResponseSchema,
   GetMyPetsQuerySchema,
@@ -9,12 +11,14 @@ import {
   UploadPetImageResponseSchema,
 } from "../schemas";
 import {
+  adoptionRequestHanlder,
   createPetHandler,
   getMyPetsHanlder,
   getPetsHandler,
   uploadPetImageHandler,
 } from "../controller/pets.controller";
 import { createResponsePaginedSchema } from "common/utils/create-response.schema";
+import { Type } from "@sinclair/typebox";
 
 export const petRoutes = async (fastify: FastifyInstance) => {
   fastify.route({
@@ -74,5 +78,21 @@ export const petRoutes = async (fastify: FastifyInstance) => {
     },
     preHandler: fastify.authenticate,
     handler: getMyPetsHanlder,
+  });
+  fastify.route({
+    method: "POST",
+    url: "/adoption-request",
+    schema: {
+      description: "Cria uma solicitação de adoção para um pet.",
+      tags: ["Pets"],
+      body: AdoptionRequestBodySchema,
+      response: {
+        200: Type.Object({
+          data: AdoptionRequestResponseSchema,
+        }),
+      },
+    },
+    preHandler: fastify.authenticate,
+    handler: adoptionRequestHanlder,
   });
 };

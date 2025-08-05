@@ -1,4 +1,4 @@
-import { PetStatus, Prisma } from "@prisma/client";
+import { AdoptionRequestStatus, PetStatus, Prisma } from "@prisma/client";
 import { prisma } from "database/clients/prisma";
 
 const create = async (data: Prisma.PetUncheckedCreateInput) => {
@@ -100,8 +100,33 @@ const findByOwnerId = async (ownerId: string, pagination: any) => {
   };
 };
 
+const createAdoptionRequest = async (
+  request_user_id: string,
+  pet_id: string,
+  message: string
+) => {
+  return await prisma.adoptionRequest.create({
+    data: {
+      request_user_id,
+      pet_id,
+      message,
+      status: AdoptionRequestStatus.pending,
+    },
+  });
+};
+
+const findById = async (id: string) => {
+  return await prisma.pet.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
 export const petsRepository = {
   create,
   findAll,
   findByOwnerId,
+  createAdoptionRequest,
+  findById,
 };
