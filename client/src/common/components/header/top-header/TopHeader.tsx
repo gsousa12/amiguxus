@@ -180,11 +180,11 @@ const MobileOverlay: React.FC<{ toggleMenu: () => void }> = ({
       <nav className="flex flex-col gap-4 px-6">
         <MenuItem
           label="Ache um doguinho para adotar"
-          onClick={() => handleNavigate("/search/dog")}
+          onClick={() => handleNavigate("/search")}
         />
         <MenuItem
           label="Ache um gatinho para adotar"
-          onClick={() => handleNavigate("/search/cat")}
+          onClick={() => handleNavigate("/search")}
         />
 
         {!isAuthenticated ? (

@@ -62,7 +62,7 @@ export const createPetHandler = async (
   });
 
   await addNotificationJob({
-    title: "Novo pet disponível para adoção",
+    title: "Pet cadastrado com sucesso!",
     message: `Seu pet ${createdPet.name} foi cadastrado e está disponível para adoção!`,
     related_user_id: userId,
   });
