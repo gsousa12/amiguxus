@@ -12,7 +12,7 @@ import swagger from "plugins/swagger";
 import minioPlugin from "plugins/minio";
 
 export const fastifyAppConfiguration: FastifyServerOptions = {
-  logger: false,
+  logger: true,
   ignoreTrailingSlash: true,
   ignoreDuplicateSlashes: true,
 };

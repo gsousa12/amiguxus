@@ -11,6 +11,7 @@ import { userRepository } from "modules/users/repository/users.repository";
 import { randomUUID } from "crypto";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { environment } from "common/config/environment";
+import { addNotificationJob } from "background/producers/notifications.producer";
 
 export const createPetHandler = async (
   request: FastifyRequest<{ Body: CreatePetBodySchemaType }>,
@@ -58,6 +59,12 @@ export const createPetHandler = async (
     city,
     state,
     status: PetStatus.available,
+  });
+
+  await addNotificationJob({
+    title: "Novo pet disponível para adoção",
+    message: `Seu pet ${createdPet.name} foi cadastrado e está disponível para adoção!`,
+    related_user_id: userId,
   });
 
   return createSuccessResponse(reply, createdPet, 201);

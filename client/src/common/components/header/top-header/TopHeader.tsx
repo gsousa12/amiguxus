@@ -10,7 +10,7 @@ import {
 } from "../../ui/dropdown-menu";
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 import { useAuthStore } from "@/common/stores/auth/auth-store";
-import { getOnlyFirstName } from "@/common/lib/utils";
+// import { getOnlyFirstName } from "@/common/lib/utils";
 
 export interface IconButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -63,7 +63,7 @@ export const TopHeader: React.FC = () => {
 // --- DesktopActions ---
 export const DesktopActions: React.FC = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const user = useAuthStore((s) => s.user);
+  // const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
