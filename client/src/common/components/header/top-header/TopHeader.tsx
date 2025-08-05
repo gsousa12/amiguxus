@@ -10,6 +10,7 @@ import {
 } from "../../ui/dropdown-menu";
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 import { useAuthStore } from "@/common/stores/auth/auth-store";
+import { useNotifications } from "@/common/api/queries/notifications/notifications-queries";
 // import { getOnlyFirstName } from "@/common/lib/utils";
 
 export interface IconButtonProps
@@ -260,20 +261,86 @@ const RegisterButton: React.FC = () => {
   );
 };
 
-const NotificationBell: React.FC = () => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <IconButton tooltip="Notificações">
-        <Bell className="h-5 w-5" />
-      </IconButton>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="w-64">
-      <p className="px-4 py-6 text-center text-sm text-gray-500">
-        Sem notificações por enquanto.
-      </p>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+export const NotificationBell: React.FC = () => {
+  const {
+    data: notifications = [],
+    isLoading,
+    error,
+  } = useNotifications({
+    // dispara refetch a cada 1 minuto, mantendo o cache “stale” também 1 min
+    refetchInterval: 1000 * 60,
+    staleTime: 1000 * 60,
+    retry: 2,
+  });
+
+  // Contador de notificações não lidas
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div className="relative">
+          <IconButton tooltip="Notificações">
+            <Bell className="h-5 w-5 text-gray-800" />
+          </IconButton>
+          {unreadCount > 0 && (
+            <span
+              className="absolute -top-1 -right-1 flex h-4 w-4 items-center 
+                         justify-center rounded-full bg-rose-500 
+                         text-xs font-semibold text-white"
+            >
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+          )}
+        </div>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end" className="w-64 p-0 overflow-hidden">
+        {isLoading ? (
+          <div className="p-4 text-center text-sm text-gray-500">
+            Carregando…
+          </div>
+        ) : error ? (
+          <div className="p-4 text-center text-sm text-rose-600">
+            Erro ao carregar
+          </div>
+        ) : notifications.length === 0 ? (
+          <div className="p-4 text-center text-sm text-gray-500">
+            Sem notificações por enquanto.
+          </div>
+        ) : (
+          <ul className="max-h-64 overflow-y-auto divide-y divide-gray-100">
+            {notifications.map((n) => (
+              <li
+                key={n.id}
+                className="px-4 py-2 hover:bg-rose-50 cursor-pointer"
+              >
+                <div className="flex items-start justify-between">
+                  <span className="text-sm font-medium text-gray-900">
+                    {n.title}
+                  </span>
+                  {!n.is_read && (
+                    <span
+                      className="inline-block h-2 w-2 rounded-full
+                                 bg-rose-500 mt-1"
+                      aria-label="Não lido"
+                    />
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-gray-700 line-clamp-2">
+                  {n.message}
+                </p>
+                <time className="mt-1 block text-xs text-gray-400">
+                  {new Date(n.created_at).toLocaleString()}
+                </time>
+              </li>
+            ))}
+          </ul>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const HamburgerButton: React.FC<{
   open: boolean;
