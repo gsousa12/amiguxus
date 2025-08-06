@@ -123,10 +123,23 @@ const findById = async (id: string) => {
   });
 };
 
+const findAdoptionRequestByUserAndPetId = async (
+  userId: string,
+  petId: string
+) => {
+  return await prisma.adoptionRequest.findFirst({
+    where: {
+      request_user_id: userId,
+      pet_id: petId,
+    },
+  });
+};
+
 export const petsRepository = {
   create,
   findAll,
   findByOwnerId,
   createAdoptionRequest,
   findById,
+  findAdoptionRequestByUserAndPetId,
 };

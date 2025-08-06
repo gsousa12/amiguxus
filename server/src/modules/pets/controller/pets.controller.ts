@@ -214,6 +214,16 @@ export const adoptionRequestHanlder = async (
     );
   }
 
+  const adoptionRequestExists =
+    await petsRepository.findAdoptionRequestByUserAndPetId(userId, pet_id);
+  if (adoptionRequestExists) {
+    return createErrorResponse(
+      reply,
+      "Você já enviou uma solicitação de adoção para este pet.",
+      409
+    );
+  }
+
   const adoptionRequest = await petsRepository.createAdoptionRequest(
     userId,
     pet_id,

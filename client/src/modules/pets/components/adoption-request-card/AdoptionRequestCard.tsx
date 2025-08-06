@@ -21,7 +21,6 @@ export const AdoptionRequestCard = ({
   onRequest: () => void;
 }) => (
   <Card className="relative rounded-md shadow">
-    {/* coração */}
     <button
       onClick={onToggleFavorite}
       className="absolute right-4 top-4 rounded-full bg-rose-50 p-2 text-rose-500 hover:bg-rose-100"
