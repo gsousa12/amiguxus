@@ -13,10 +13,18 @@ import { usePetDetailsPageController } from "./pet-details-controller";
 import { cn } from "@/common/lib/utils";
 import { PetInfoSection } from "../../components/pet-info-section/PetInfoSection";
 import { AdoptionRequestCard } from "../../components/adoption-request-card/AdoptionRequestCard";
+import { AdoptionRequestPopup } from "../../components/adoption-request-popup/AdoptionRequestPopup";
 
 export const PetDetailsPage = () => {
-  const { pet, isFavorite, toggleFavorite, toLabelPetInformations, onRequest } =
-    usePetDetailsPageController();
+  const {
+    pet,
+    isFavorite,
+    toggleFavorite,
+    toLabelPetInformations,
+    onRequest,
+    openAdoptionRequestPopup,
+    setOpenAdoptionRequestPopup,
+  } = usePetDetailsPageController();
 
   const isMobile = useMobileDetect();
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -102,6 +110,12 @@ export const PetDetailsPage = () => {
           isFavorite={isFavorite}
           onToggleFavorite={toggleFavorite}
           onRequest={onRequest}
+        />
+
+        <AdoptionRequestPopup
+          open={openAdoptionRequestPopup}
+          onClose={() => setOpenAdoptionRequestPopup(false)}
+          petId={pet.id}
         />
       </div>
     </div>

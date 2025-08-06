@@ -63,6 +63,18 @@ export const create = async (data: Prisma.NotificationCreateInput) => {
 //   };
 // };
 
+const findByUserId = async (userId: string) => {
+  return prisma.notification.findMany({
+    where: {
+      related_user_id: userId,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+};
+
 export const notificationRepository = {
   create,
+  findByUserId,
 };

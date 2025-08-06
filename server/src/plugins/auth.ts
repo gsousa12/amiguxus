@@ -48,6 +48,7 @@ const authPlugin = async (app: FastifyInstance) => {
         reply.status(401).send({
           error: "Você não possui autorização para realizar essa ação.",
         });
+        throw err;
       }
     }
   );

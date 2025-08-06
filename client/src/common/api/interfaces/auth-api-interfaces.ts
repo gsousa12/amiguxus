@@ -4,11 +4,9 @@ export interface LoginRequest {
 }
 
 export interface getUserInformationResponse {
-  userId: number;
-  name: string;
+  id: string;
+  full_name: string;
   email: string;
-  iat: number;
-  exp: number;
 }
 
 export interface RegisterRequest {

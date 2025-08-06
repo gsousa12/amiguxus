@@ -1,40 +1,49 @@
-import { validateUserDispatch } from "@/common/api/dispatch/auth-dispatchs";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { useLocation } from "react-router-dom";
+import { getUserInformationDispatch } from "@/common/api/dispatch/auth-dispatchs";
+import { useAuthStore } from "@/common/stores/auth/auth-store";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthCtx {
-  isAuth: boolean | null;
-  refreshAuth: () => Promise<void>;
+  isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthCtx>({
-  isAuth: null,
-  refreshAuth: async () => {},
-});
+const AuthContext = createContext<AuthCtx>({ isLoading: true });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isAuth, setIsAuth] = useState<boolean | null>(null);
-  const location = useLocation();
-
-  const checkAuth = useCallback(async () => {
-    const ok = await validateUserDispatch();
-    setIsAuth(ok);
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const { setUser, setAuthenticated, logout } = useAuthStore();
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth, location.pathname]);
+    const initializeAuth = async () => {
+      try {
+        const raw: any = await getUserInformationDispatch();
+        let user = raw;
+        while (user && typeof user === "object" && "data" in user) {
+          user = user.data;
+        }
+        if (user && user.id) {
+          setUser(user);
+          setAuthenticated(true);
+        } else {
+          logout();
+        }
+      } catch (err) {
+        logout();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
+  }, [setUser, setAuthenticated, logout]);
+
+  if (isLoading) {
+    return <div>Carregando aplicação...</div>;
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuth, refreshAuth: checkAuth }}>
+    <AuthContext.Provider value={{ isLoading }}>
       {children}
     </AuthContext.Provider>
   );

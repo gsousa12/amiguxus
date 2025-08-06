@@ -17,13 +17,14 @@ export const getUserId = (): number | null => {
 export const getUserName = (): string | null => {
   try {
     const raw = sessionStorage.getItem("user");
-    return raw ? JSON.parse(raw).name : null;
+    return raw ? JSON.parse(raw).full_name : null;
   } catch {
     return null;
   }
 };
 
 export const getOnlyFirstName = (name: string): string => {
+  if (!name) return "";
   const parts = name.split(" ");
   if (parts.length > 1) {
     return parts[0];

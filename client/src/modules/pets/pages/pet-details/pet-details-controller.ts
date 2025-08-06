@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   EPetAge,
   EPetGender,
@@ -33,6 +33,8 @@ const sizeLabels: Record<EPetSize, string> = {
 export const usePetDetailsPageController = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [openAdoptionRequestPopup, setOpenAdoptionRequestPopup] =
+    useState(false);
 
   const pet: Pet | undefined = location.state?.pet;
 
@@ -44,7 +46,7 @@ export const usePetDetailsPageController = () => {
 
   const isFavorite = false;
   const toggleFavorite = () => console.log("Toggle favorite");
-  const onRequest = () => {};
+  const onRequest = () => setOpenAdoptionRequestPopup(true);
 
   const toLabelPetInformations = (key: string, value: any) => {
     switch (key) {
@@ -68,5 +70,7 @@ export const usePetDetailsPageController = () => {
     onRequest,
     toLabelPetInformations,
     isMobile: useMobileDetect(),
+    openAdoptionRequestPopup,
+    setOpenAdoptionRequestPopup,
   };
 };
