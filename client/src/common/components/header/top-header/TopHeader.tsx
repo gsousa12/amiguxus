@@ -76,9 +76,18 @@ export const DesktopActions: React.FC = () => {
     navigate("/register");
   };
 
+  const navigteToMyPets = () => {
+    if (!isAuthenticated) {
+      navigate("/home");
+      return;
+    }
+    navigate("/my-pets");
+  };
+
   const handleLogout = async () => {
     try {
       await logoutDispatch();
+      navigate("/home", { replace: true });
     } finally {
       logout();
     }
@@ -119,7 +128,7 @@ export const DesktopActions: React.FC = () => {
                 Cadastrar Pet
               </DropdownMenuItem>
               <DropdownMenuItem
-                onSelect={() => {}}
+                onSelect={navigteToMyPets}
                 className="px-4 py-2 hover:bg-rose-50 hover:cursor-pointer text-gray-700"
               >
                 Meus Pets

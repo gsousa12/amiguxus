@@ -79,6 +79,7 @@ export const petRoutes = async (fastify: FastifyInstance) => {
     preHandler: fastify.authenticate,
     handler: getMyPetsHanlder,
   });
+
   fastify.route({
     method: "POST",
     url: "/adoption-request",
