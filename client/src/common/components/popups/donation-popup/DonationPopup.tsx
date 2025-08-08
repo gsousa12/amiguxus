@@ -163,7 +163,8 @@ const DonationPopUp: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <div className="mt-5 space-y-2 text-xs text-gray-600">
           <p>• Qualquer valor ajuda — muito obrigado pelo carinho! 🐾</p>
           <p>
-            • Se quiser, envie o comprovante para nosso e-mail: ong@exemplo.org
+            • Se quiser, envie o comprovante para nosso e-mail:
+            amiguxus@email.com
           </p>
         </div>
 
