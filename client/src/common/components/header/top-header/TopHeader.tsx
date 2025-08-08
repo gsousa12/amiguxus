@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { PawPrint, Menu, X, Bell, LogOut, User } from "lucide-react";
 import { useMobileDetect } from "@/common/hooks/use-mobile-detect";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 import { logoutDispatch } from "@/common/api/dispatch/auth-dispatchs";
 import { useAuthStore } from "@/common/stores/auth/auth-store";
 import { useNotifications } from "@/common/api/queries/notifications/notifications-queries";
+import DonationPopUp from "../../popups/donation-popup/DonationPopup";
 // import { getOnlyFirstName } from "@/common/lib/utils";
 
 export interface IconButtonProps
@@ -40,13 +41,23 @@ IconButton.displayName = "IconButton";
 export const TopHeader: React.FC = () => {
   const isMobile = useMobileDetect();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openDonationPopUp, setOpenDonationPopUp] = useState(false);
   const toggleMenu = () => setMenuOpen((p) => !p);
+
+  const handlerOenDonationPopUp = () => {
+    setOpenDonationPopUp(true);
+  };
 
   return (
     <>
+      {openDonationPopUp && (
+        <Fragment>
+          <DonationPopUp onClose={() => setOpenDonationPopUp(false)} />
+        </Fragment>
+      )}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="relative mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-          <DonateButton onClick={() => {}} />
+          <DonateButton onClick={handlerOenDonationPopUp} />
           <Logo className="absolute left-1/2 -translate-x-1/2" />
           {!isMobile ? (
             <DesktopActions />

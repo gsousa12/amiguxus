@@ -61,17 +61,17 @@ export const HomePage: React.FC = () => {
                text-sm font-semibold text-rose-700 transition hover:bg-rose-50 hover:cursor-pointer 
                focus:outline-none focus:ring-2 focus:ring-rose-300"
             >
-              Cadastrar pet
+              Cadastrar Amiguxu
             </button>
 
-            <button
+            {/* <button
               type="button"
               onClick={() => navigate("/donations")}
               className="text-sm font-medium text-rose-700 underline underline-offset-4
                hover:text-rose-800 hover:cursor-pointer "
             >
               Fazer doação
-            </button>
+            </button> */}
           </div>
 
           <div className="mt-6 text-sm text-gray-600">
