@@ -23,6 +23,8 @@ test.describe('Cadastro', () => {
 
     await signUpPage.submit();
     await signUpPage.expectSuccessMessage();
+    await signUpPage.page.getByText("Ok").click();
+    await signUpPage.page.waitForLoadState("networkidle"); // Espera para garantir que a navegação ocorreu
     await signUpPage.expectRedirectToSignIn();
   });
 
