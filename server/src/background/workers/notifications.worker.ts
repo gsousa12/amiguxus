@@ -7,7 +7,7 @@ const QUEUE_NAME = "notifications";
 
 const processor = async (job: Job<NotificationJobData>) => {
   // --- Adicionar Logs --- //
-  console.log(`Processando job ${job.id} ${job.name}`);
+  // console.log(`Processando job ${job.id} ${job.name}`);
   const { related_user_id, ...notificationData } = job.data;
 
   try {

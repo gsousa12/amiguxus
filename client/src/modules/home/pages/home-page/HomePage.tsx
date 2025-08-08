@@ -26,7 +26,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <h1 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl">
-            Amiguxus Crateús
+            Amiguxus
           </h1>
 
           <p className="mt-3 text-base leading-relaxed text-gray-700 sm:text-lg">
@@ -47,7 +47,9 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/search")}
-              className="rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400"
+              className="rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-semibold 
+              text-white shadow-sm transition hover:bg-rose-700 hover:cursor-pointer  focus:outline-none 
+              focus:ring-2 focus:ring-rose-400"
             >
               Quero adotar
             </button>
@@ -55,7 +57,9 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/register")}
-              className="rounded-lg border border-rose-300 bg-white px-5 py-2.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-300"
+              className="rounded-lg border border-rose-300 bg-white px-5 py-2.5
+               text-sm font-semibold text-rose-700 transition hover:bg-rose-50 hover:cursor-pointer 
+               focus:outline-none focus:ring-2 focus:ring-rose-300"
             >
               Cadastrar pet
             </button>
@@ -63,7 +67,8 @@ export const HomePage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/donations")}
-              className="text-sm font-medium text-rose-700 underline underline-offset-4 hover:text-rose-800"
+              className="text-sm font-medium text-rose-700 underline underline-offset-4
+               hover:text-rose-800 hover:cursor-pointer "
             >
               Fazer doação
             </button>
@@ -126,8 +131,8 @@ export const HomePage: React.FC = () => {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-500">
-          Amiguxus Crateús — Projeto acadêmico da Universidade Federal do Ceará
-          (UFC) — Campus Crateús.
+          Amiguxus — Projeto acadêmico da Universidade Federal do Ceará (UFC) —
+          Campus Crateús.
         </p>
       </section>
     </main>

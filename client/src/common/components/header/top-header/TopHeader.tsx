@@ -133,12 +133,12 @@ export const DesktopActions: React.FC = () => {
               >
                 Meus Pets
               </DropdownMenuItem>
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 onSelect={() => {}}
                 className="px-4 py-2 hover:bg-rose-50 hover:cursor-pointer text-gray-700"
               >
                 Favoritados
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
 

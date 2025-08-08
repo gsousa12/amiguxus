@@ -127,23 +127,6 @@ function DayString(date: string | Date) {
   }
 }
 
-const PawLoader: React.FC<{ label?: string }> = ({ label }) => (
-  <div className="flex flex-col items-center justify-center gap-3">
-    <div className="relative h-12 w-12">
-      <div
-        className="absolute inset-0 animate-ping rounded-full bg-rose-300/40"
-        aria-hidden
-      />
-      <div className="relative grid h-12 w-12 place-items-center rounded-full bg-rose-500 text-2xl text-white shadow">
-        🐾
-      </div>
-    </div>
-    {label ? (
-      <p className="text-sm font-medium text-rose-700">{label}</p>
-    ) : null}
-  </div>
-);
-
 const RequestStatusChip: React.FC<{ status: AdoptionRequest["status"] }> = ({
   status,
 }) => {
@@ -217,8 +200,11 @@ const AdoptionRequestsModal: React.FC<{
               Confira as mensagens e os dados de contato dos interessados.
             </p>
           </div>
-          <div className="rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-700 ring-1 ring-rose-200">
-            {requests.length} solicitação{requests.length === 1 ? "" : "s"}
+          <div className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-1 text-sm font-semibold text-rose-700 ring-1 ring-rose-200 whitespace-nowrap">
+            <span>{requests.length}</span>
+            <span>
+              {requests.length === 1 ? "solicitação" : "solicitações"}
+            </span>
           </div>
         </div>
 
@@ -474,7 +460,9 @@ export const MyPetsPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/register")}
-              className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400"
+              className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold
+               text-white shadow-sm transition hover:bg-rose-700 focus:outline-none 
+               focus:ring-2 focus:ring-rose-400 hover:cursor-pointer "
             >
               + Cadastrar novo pet
             </button>
@@ -482,9 +470,7 @@ export const MyPetsPage: React.FC = () => {
         </header>
 
         {isLoading ? (
-          <section className="grid min-h-[40vh] place-items-center">
-            <PawLoader label="Carregando seus pets..." />
-          </section>
+          <section className="grid min-h-[40vh] place-items-center"></section>
         ) : isError ? (
           <section className="grid min-h-[40vh] place-items-center">
             <div className="w-full max-w-md rounded-2xl border border-rose-200 bg-white p-6 text-center shadow-sm">
@@ -516,7 +502,7 @@ export const MyPetsPage: React.FC = () => {
             <div className="w-full max-w-md rounded-2xl border border-rose-200 bg-white p-6 text-center shadow-sm">
               <div className="mb-2 text-6xl">🐾</div>
               <h2 className="text-lg font-semibold text-gray-900">
-                Você ainda não cadastrou pets
+                Você ainda não cadastrou nenhum amiguxo.
               </h2>
               <p className="mt-1 text-sm text-gray-600">
                 Comece agora e ajude um amigo peludo a encontrar um lar.
