@@ -38,7 +38,8 @@ export class SignUpPage {
   }
 
   async goto() {
-    await this.page.goto('/sign-up');
+    await this.page.goto('/home');
+    await this.page.getByRole('button', { name: 'Cadastrar', exact: true }).click();
   }
 
   async fillForm({

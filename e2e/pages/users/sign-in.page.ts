@@ -23,6 +23,7 @@ export class SignInPage {
 
   async goto() {
     await this.page.goto('/sign-in');
+    await this.page.waitForLoadState('networkidle');
   }
 
   async login(email: string, password: string) {
