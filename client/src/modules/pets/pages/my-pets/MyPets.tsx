@@ -502,14 +502,16 @@ export const MyPetsPage: React.FC = () => {
             <div className="w-full max-w-md rounded-2xl border border-rose-200 bg-white p-6 text-center shadow-sm">
               <div className="mb-2 text-6xl">🐾</div>
               <h2 className="text-lg font-semibold text-gray-900">
-                Você ainda não cadastrou nenhum amiguxo.
+                Você ainda não cadastrou nenhum amiguxu.
               </h2>
               <p className="mt-1 text-sm text-gray-600">
                 Comece agora e ajude um amigo peludo a encontrar um lar.
               </p>
               <button
                 onClick={() => navigate("/register")}
-                className="mt-4 rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                className="mt-4 rounded-lg bg-rose-600 px-5 py-2.5 text-sm 
+                font-semibold text-white shadow-sm transition hover:bg-rose-700 
+                focus:outline-none focus:ring-2 focus:ring-rose-400 hover:cursor-pointer"
               >
                 Cadastrar meu primeiro pet
               </button>
