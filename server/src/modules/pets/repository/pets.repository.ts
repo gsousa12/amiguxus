@@ -81,6 +81,22 @@ const findByOwnerId = async (ownerId: string, pagination: any) => {
       where: {
         owner_id: ownerId,
       },
+      include: {
+        adoptionRequests: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                full_name: true,
+                city: true,
+                email: true,
+                phone: true,
+                state: true,
+              },
+            },
+          },
+        },
+      },
       skip,
       take,
       orderBy: {
@@ -99,7 +115,6 @@ const findByOwnerId = async (ownerId: string, pagination: any) => {
     total,
   };
 };
-
 const createAdoptionRequest = async (
   request_user_id: string,
   pet_id: string,

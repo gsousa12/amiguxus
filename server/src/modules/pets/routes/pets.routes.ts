@@ -73,7 +73,7 @@ export const petRoutes = async (fastify: FastifyInstance) => {
       tags: ["Pets"],
       querystring: GetMyPetsQuerySchema,
       response: {
-        200: createResponsePaginedSchema(PetEntitySchema),
+        200: createResponsePaginedSchema(Type.Any()),
       },
     },
     preHandler: fastify.authenticate,
