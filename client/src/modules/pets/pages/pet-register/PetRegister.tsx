@@ -20,7 +20,7 @@ export const PetRegisterPage = () => {
     <div className="container mx-auto max-w-2xl py-10">
       <div className="space-y-2 mb-8 text-center">
         <h1 className="text-3xl font-bold text-rose-900">
-          Cadastre um novo Amiguxo
+          Cadastre um novo amiguxu
         </h1>
         <p className="text-gray-600">
           Preencha as informações para que ele encontre um lar!

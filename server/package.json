@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Amiguxos Api",
+  "description": "amiguxus Api",
   "main": "server.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

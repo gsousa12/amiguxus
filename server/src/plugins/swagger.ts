@@ -9,7 +9,7 @@ async function swaggerPlugin(app: FastifyInstance) {
       info: {
         title: "Amiguxus Api",
         description:
-          "Amiguxos é uma plataforma intuitiva para adoção de cães e gatos.",
+          "amiguxus é uma plataforma intuitiva para adoção de cães e gatos.",
         version: "1.0.0",
       },
       tags: [
